@@ -18,7 +18,7 @@ DeepTutor 离线整合包，无需安装 Python/Node.js，解压即用。
 
 2. **一键启动**
    ```
-   双击 scripts\start.bat
+   双击 start.bat
    ```
 
 3. **访问**
@@ -38,8 +38,6 @@ DeepTutor-Portable/
 │   └── requirements/        # 依赖定义
 ├── workspace/               # 用户数据持久化（升级时保留）
 │   └── data/
-├── scripts/
-│   └── start.bat            # 一键启动脚本
 ├── configs/
 │   ├── .env                 # 环境配置（用户填写，Git 忽略）
 │   └── .env.example         # 配置模板
