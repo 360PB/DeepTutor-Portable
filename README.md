@@ -2,7 +2,11 @@
 
 DeepTutor 离线整合包，无需安装 Python/Node.js，解压即用。
 
-下载: https://pan.quark.cn/s/b0ae07ff3fdb
+| 资源 | 链接 |
+|------|------|
+| 下载 (夸克网盘) | https://pan.quark.cn/s/b0ae07ff3fdb |
+| GitHub 仓库 | https://github.com/360PB/DeepTutor-Portable |
+| 上游源码 | https://github.com/HKUDS/DeepTutor |
 
 ## 快速开始
 
@@ -25,19 +29,22 @@ DeepTutor 离线整合包，无需安装 Python/Node.js，解压即用。
 
 ```
 DeepTutor-Portable/
-├── runtime/
-│   ├── python/          # 嵌入式 Python 3.11
-│   └── nodejs/          # 嵌入式 Node.js 20
-├── deeptutor-src/       # DeepTutor 源码
-│   ├── deeptutor/       # Python 后端
-│   ├── web/             # Next.js 前端
-│   └── requirements/    # 依赖定义
-├── workspace/           # 用户数据持久化
+├── runtime/                 # 嵌入式运行时（不在 Git 仓库中）
+│   ├── python/              # 嵌入式 Python 3.11
+│   └── nodejs/              # 嵌入式 Node.js 20
+├── deeptutor-src/           # DeepTutor 源码（可替换更新）
+│   ├── deeptutor/           # Python 后端
+│   ├── web/                 # Next.js 前端
+│   └── requirements/        # 依赖定义
+├── workspace/               # 用户数据持久化（升级时保留）
 │   └── data/
 ├── scripts/
-│   └── start.bat        # 一键启动脚本
+│   └── start.bat            # 一键启动脚本
 ├── configs/
-│   └── .env             # 环境配置（用户填写）
+│   ├── .env                 # 环境配置（用户填写，Git 忽略）
+│   └── .env.example         # 配置模板
+├── .agents/
+│   └── skills/              # Kimi 维护 Skill
 └── README.md
 ```
 
@@ -77,6 +84,15 @@ EMBEDDING_BINDING=lm_studio
 EMBEDDING_HOST=http://localhost:1234/v1
 ```
 
+## 更新与维护
+
+本项目使用 `.agents/skills/deeptutor-portable-sync/` 中的 Kimi Skill 进行维护，包含以下工作流：
+
+- **同步上游**: 从 `HKUDS/DeepTutor` 拉取最新源码到 `deeptutor-src/`
+- **推送发布**: 将整合包推送到 `360PB/DeepTutor-Portable`
+
+手动更新源码：直接替换 `deeptutor-src/` 目录中的文件，保留 `workspace/` 用户数据。
+
 ## 常见问题
 
 **Q: 启动后无法访问前端？**
@@ -85,10 +101,10 @@ A: 检查 configs/.env 是否配置正确，确保 API Key 已填写。
 **Q: 知识库上传失败？**
 A: 确保 Embedding 配置正确，且模型支持文本嵌入。
 
-**Q: 如何更新源码？**
-A: 直接替换 `deeptutor-src/` 目录中的文件，保留 `workspace/` 数据。
+**Q: runtime/ 目录缺失？**
+A: `runtime/` 包含嵌入式 Python/Node 运行时（约 535MB），未包含在 Git 仓库中。请从网盘下载完整整合包，或参照 `offline-portable-pack` Skill 自行制作。
 
-## 源码
+## 相关资源
 
 - DeepTutor 官方: https://github.com/HKUDS/DeepTutor
-- 整合包制作参考: 离线整合包制作 Skill.md
+- 离线整合包制作 Skill: `offline-portable-pack`
