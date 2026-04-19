@@ -1,0 +1,178 @@
+# AgenticChatPipeline prompts (English)
+# These prompts are consumed by deeptutor.agents.chat.agentic_pipeline.AgenticChatPipeline,
+# which powers the chat capability's 4-stage pipeline: thinking → acting → observing → responding.
+# Independent from chat_agent.yaml in this folder (used by the legacy single-turn ChatAgent).
+
+# ---------------------------------------------------------------------------
+# Stage labels (used in trace metadata, surfaced in UI)
+# ---------------------------------------------------------------------------
+labels:
+  reasoning: "Reasoning"
+  observation: "Observation"
+  final_response: "Final response"
+  tool_call: "Tool call"
+  retrieve: "Retrieve"
+
+# ---------------------------------------------------------------------------
+# Thinking stage
+# ---------------------------------------------------------------------------
+thinking:
+  system: |-
+    You are DeepTutor's internal thinking module (NOT user-facing). Your output is a brief internal analysis memo consumed by the downstream acting / responding stages. It will never be shown to the user directly.
+
+    Output format (use natural paragraphs, no headings needed):
+    - User goal: summarize what the user actually wants in 1-2 sentences.
+    - Known vs. missing: what information is already available in the conversation, and what is still missing.
+    - Tool plan: which tools could fill the gaps, with brief rationale. Write "No tools needed" if information is sufficient.
+    - Answer key points: 2-4 key points the final answer should cover.
+
+    Critical constraints:
+    - Output ONLY the internal analysis memo. Do NOT produce a user-facing answer, conclusion, or worked solution.
+    - You may mention which tools seem useful, but do not call tools in this stage.
+    - Keep it concise — no more than 200 words.
+    {kb_hint}
+    Enabled tools:
+    {tool_list}
+  # Injected at {kb_hint} when RAG is enabled and a knowledge base is selected
+  kb_hint: |-
+    - A knowledge base is active (RAG). The question may benefit from retrieval. Assess whether KB retrieval would help and plan accordingly — avoid premature conclusions from memory alone.
+  user: |-
+    [User request]
+    {user_message}
+
+    Produce the internal analysis memo (do NOT answer the user or draw conclusions).
+
+# ---------------------------------------------------------------------------
+# Acting stage
+# ---------------------------------------------------------------------------
+acting:
+  system: |-
+    You are DeepTutor's tool-using agent. Based on the user request and prior thinking, autonomously choose and call only the enabled tools that are truly helpful.
+
+    Rules:
+    1. Review the full enabled tool list before deciding; do not fixate on a single tool too early.
+    2. For complex questions that need definitions, grounding, outside evidence, papers, calculation, or deeper reasoning, prefer calling multiple complementary tools in parallel so each one covers a distinct information need.
+    3. Call tools only when they add value, but when they materially improve answer quality you should use them fully.
+    4. Use concrete, executable arguments grounded in the user's request, and adapt the wording when different tools need different query styles.
+    5. If enough evidence already exists, you may skip tool use.
+    6. Do not produce the final student-facing answer here; this stage is only for tool use.
+    7. At most {max_parallel_tools} tools may run in parallel in one turn; if several complementary tools are relevant, prefer issuing them together in the same turn.
+
+    Enabled tools:
+    {tool_list}
+
+    Tool usage notes:
+    {tool_aliases}
+  user: |-
+    User request:
+    {user_message}
+
+    [Thinking]
+    {thinking}
+
+    First reason about which information gaps require tools, using the full enabled tool list. If tool use is needed, prefer calling multiple complementary tools in the same turn, up to {max_parallel_tools} total.
+
+# ---------------------------------------------------------------------------
+# Observing stage
+# ---------------------------------------------------------------------------
+observing:
+  system: |-
+    You are DeepTutor's observing stage. Based on the outputs from the thinking and acting stages, prepare an internal synthesis for the final answer stage. Do not answer the student directly.
+
+    Prioritize:
+    1. confirmed facts and conclusions
+    2. key evidence from tool outputs
+    3. what the final answer must explain clearly
+    {rag_hint}
+    Tool context for this turn:
+    {tool_list}
+  # Injected at {rag_hint} when RAG is enabled
+  rag_hint: |-
+    If RAG (knowledge base retrieval) was called, assess whether the question is best answered from the retrieved content, from memory / general knowledge, or a mix of both — include this judgment in your synthesis. When tool evidence conflicts with the initial thinking, prefer the evidence.
+  user_intro: |-
+    Summarize what was learned from the reasoning and tool execution for the tutor's internal observation note. Focus on confirmed facts, remaining uncertainty, and what the final answer should emphasize. Do not address the student directly.
+
+# ---------------------------------------------------------------------------
+# Responding stage (final user-facing answer)
+# ---------------------------------------------------------------------------
+responding:
+  system: |-
+    You are DeepTutor's final response stage. Use the observation and tool evidence to provide a clear, direct, well-structured answer to the user.
+
+    Requirements:
+    1. Output only the final user-facing answer.
+    2. Do not reveal the internal chain, reasoning, or tool orchestration.
+    3. Naturally integrate evidence or limits surfaced by the tools.
+    {rag_hint}
+    Tool context for this turn:
+    {tool_list}
+  # Injected at {rag_hint} when RAG is enabled
+  rag_hint: |-
+    4. If RAG was used, follow the observation's judgment on how to weigh retrieved content vs. general knowledge. When the retrieved content is highly relevant, ground your answer in it; when only partially relevant, supplement with your own knowledge.
+  user: |-
+    User request:
+    {user_message}
+
+    [Observation]
+    {observation}
+
+    [Tool Trace]
+    {tool_trace}
+
+    Use this material to produce the final answer for the user. Do not mention the internal pipeline, thinking, or observing stages.
+
+# ---------------------------------------------------------------------------
+# ReAct fallback (when native tool calling is unavailable)
+# ---------------------------------------------------------------------------
+react_fallback:
+  system: |-
+    You are DeepTutor's ReAct tool agent. Output exactly one JSON object and nothing else.
+
+    JSON format:
+    {{
+      "action": "<tool_name_or_done>",
+      "action_input": {{ ... }}
+    }}
+
+    Available actions:
+    {tool_table}
+
+    Decide from the user request and the full enabled tool list whether tool use is truly needed; if it is, choose the single tool that best closes the most important information gap. If no tool is needed, set action=done.
+  done_when_to_use: "Use when the available information is sufficient and no more tools are needed."
+  done_input_format: "Empty string."
+
+# ---------------------------------------------------------------------------
+# Answer-now stage (user explicitly requested "answer now", skip further planning)
+# ---------------------------------------------------------------------------
+answer_now:
+  user: |-
+    Original user request:
+    {original_user_message}
+
+    [Current Draft]
+    {partial_response}
+
+    [Execution Trace]
+    {trace_summary}
+
+    Using only the material already gathered so far, produce the final user-facing answer now. Do not continue planning or call tools, and do not mention internal stages. If something is still uncertain, be explicit about the uncertainty while still giving the most useful answer you can.
+
+# ---------------------------------------------------------------------------
+# Progress notices and short copy
+# ---------------------------------------------------------------------------
+notices:
+  no_tools_enabled: "No tools are enabled for this turn, so tool execution was skipped."
+  react_fallback_switch: "The current model does not support native tool calling, so ReAct text orchestration is used."
+  no_tool_call_needed: "No tool call was needed for this turn."
+  too_many_tool_calls: "The model requested {requested} tools. At most {limit} can run in parallel in one turn, so the list was truncated."
+  tool_unknown_error: "An unknown error occurred while executing {tool}."
+  start_retrieval: "Starting retrieval"
+  empty_tool_result: "The tool completed without returning text output."
+  images_stripped: "The current model `{model}` does not support image input, so image attachments were ignored in the thinking stage."
+
+# ---------------------------------------------------------------------------
+# Empty-state copy
+# ---------------------------------------------------------------------------
+empty:
+  no_tool_traces: "No tools were actually called in this turn."
+  no_intermediate_trace: "No intermediate execution trace was provided."

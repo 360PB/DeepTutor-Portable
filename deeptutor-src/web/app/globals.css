@@ -1,0 +1,535 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #FAF9F6;
+    --foreground: #1F1D1B;
+    --card: #FFFFFF;
+    --card-foreground: #1F1D1B;
+    --popover: #FFFFFF;
+    --popover-foreground: #1F1D1B;
+    --primary: #B0501E;
+    --primary-foreground: #FFFFFF;
+    --secondary: #ECE7DD;
+    --secondary-foreground: #1F1D1B;
+    --muted: #ECE7DD;
+    --muted-foreground: #6B655F;
+    --accent: #ECE7DD;
+    --accent-foreground: #1F1D1B;
+    --destructive: #C53A2C;
+    --destructive-foreground: #FFFFFF;
+    --border: #DBD4C8;
+    --input: #DBD4C8;
+    --ring: #B0501E;
+  }
+
+  .dark {
+    --background: #1A1918;
+    --foreground: #E8E4DE;
+    --card: #242220;
+    --card-foreground: #E8E4DE;
+    --popover: #242220;
+    --popover-foreground: #E8E4DE;
+    --primary: #D4734B;
+    --primary-foreground: #1A1918;
+    --secondary: #2A2725;
+    --secondary-foreground: #E8E4DE;
+    --muted: #2A2725;
+    --muted-foreground: #9B9590;
+    --accent: #302D2A;
+    --accent-foreground: #E8E4DE;
+    --destructive: #D44A3C;
+    --destructive-foreground: #FFFFFF;
+    --border: #3A3634;
+    --input: #3A3634;
+    --ring: #D4734B;
+  }
+
+  .theme-snow {
+    --background: #F8FAFC;
+    --foreground: #0F172A;
+    --card: #FFFFFF;
+    --card-foreground: #0F172A;
+    --popover: #FFFFFF;
+    --popover-foreground: #0F172A;
+    --primary: #B0501E;
+    --primary-foreground: #FFFFFF;
+    --secondary: #E8EEF5;
+    --secondary-foreground: #0F172A;
+    --muted: #E8EEF5;
+    --muted-foreground: #5A6B82;
+    --accent: #E8EEF5;
+    --accent-foreground: #0F172A;
+    --destructive: #C7281F;
+    --destructive-foreground: #FFFFFF;
+    --border: #CBD5E1;
+    --input: #CBD5E1;
+    --ring: #B0501E;
+  }
+
+  .theme-glass {
+    --background: #111111;
+    --foreground: #ffffff;
+    --card: rgba(255, 255, 255, 0.05);
+    --card-foreground: #ffffff;
+    --popover: rgba(255, 255, 255, 0.1);
+    --popover-foreground: #ffffff;
+    --primary: #9d50bb;
+    --primary-foreground: #ffffff;
+    --secondary: rgba(255, 255, 255, 0.03);
+    --secondary-foreground: #eeeeee;
+    --muted: rgba(255, 255, 255, 0.05);
+    --muted-foreground: #aaaaaa;
+    --accent: rgba(255, 255, 255, 0.1);
+    --accent-foreground: #ffffff;
+    --border: rgba(255, 255, 255, 0.1);
+    --input: rgba(255, 255, 255, 0.05);
+    --ring: #6e48aa;
+  }
+
+  .theme-glass body {
+    background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0f0f1a 100%);
+    background-attachment: fixed;
+  }
+
+  .theme-glass .surface-card {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+
+  @media (min-width: 768px) {
+    .theme-glass .surface-card {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  }
+
+  .theme-glass .btn-primary {
+    background: linear-gradient(45deg, #9d50bb, #6e48aa);
+    box-shadow: 0 0 15px rgba(157, 80, 187, 0.4);
+    border: none;
+    transition: all 0.3s ease;
+  }
+
+  .theme-glass .btn-primary:hover {
+    box-shadow: 0 0 25px rgba(157, 80, 187, 0.6);
+    transform: translateY(-1px);
+  }
+
+  * {
+    @apply border-[color:var(--border)];
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    @apply antialiased;
+    background: var(--background);
+    color: var(--foreground);
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+@layer components {
+  .surface-card {
+    @apply rounded-2xl border bg-[var(--card)] shadow-sm;
+  }
+
+  .muted-chip {
+    @apply rounded-full bg-[var(--muted)] px-3 py-1 text-xs text-[var(--muted-foreground)];
+  }
+}
+
+@layer utilities {
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* ─── Prose: base ─── */
+.prose {
+  @apply font-serif text-[15px];
+}
+
+.prose pre {
+  @apply rounded-lg p-4 overflow-x-auto my-4;
+  background: #292524;
+  color: #D6D3D1;
+}
+
+.prose code:not(.md-code-block__code):not(.md-inline-code) {
+  @apply px-1.5 py-0.5 rounded text-sm font-mono;
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.prose pre code {
+  @apply bg-transparent text-inherit p-0;
+}
+
+.md-renderer .md-inline-code {
+  @apply px-1.5 py-0.5 rounded text-sm font-mono;
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.md-renderer .md-code-block {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.md-renderer .md-code-block pre,
+.md-renderer .md-code-block code {
+  background: transparent !important;
+}
+
+.md-renderer .md-code-block pre {
+  @apply overflow-x-auto;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  padding: 1rem !important;
+}
+
+.md-renderer .md-code-block__code {
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.7 !important;
+  color: inherit !important;
+}
+
+.md-renderer .md-code-block__code span {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ─── Headings ─── */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply font-sans;
+}
+
+.prose h1 {
+  @apply text-2xl font-bold tracking-tight mt-8 mb-4;
+  color: var(--foreground);
+}
+
+.prose h2 {
+  @apply text-xl font-semibold tracking-tight mt-7 mb-3;
+  color: var(--foreground);
+}
+
+.prose h3 {
+  @apply text-lg font-semibold tracking-tight mt-6 mb-2.5;
+  color: var(--foreground);
+}
+
+.prose h4 {
+  @apply text-base font-semibold tracking-tight mt-5 mb-2;
+  color: var(--foreground);
+}
+
+.prose h5 {
+  @apply text-sm font-semibold tracking-tight mt-4 mb-2;
+  color: var(--foreground);
+}
+
+.prose h6 {
+  @apply text-sm font-semibold tracking-tight mt-4 mb-2;
+  color: var(--muted-foreground);
+}
+
+/* ─── Body text ─── */
+.prose p {
+  @apply mb-4;
+  line-height: 1.75;
+  color: var(--foreground);
+}
+
+.prose strong {
+  @apply font-semibold;
+  color: var(--foreground);
+}
+
+.prose em {
+  @apply italic;
+}
+
+/* ─── Strikethrough ─── */
+.prose del,
+.prose s {
+  @apply line-through;
+  color: var(--muted-foreground);
+}
+
+/* ─── Highlight / Mark ─── */
+.prose mark {
+  @apply rounded px-1 py-0.5;
+  background: #fef08a;
+  color: #422006;
+}
+
+.dark .prose mark {
+  background: #854d0e;
+  color: #fef9c3;
+}
+
+/* ─── Subscript / Superscript ─── */
+.prose sub {
+  @apply text-[0.75em];
+  vertical-align: sub;
+}
+
+.prose sup {
+  @apply text-[0.75em];
+  vertical-align: super;
+}
+
+/* ─── Abbreviation ─── */
+.prose abbr[title] {
+  @apply cursor-help;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+
+/* ─── Keyboard ─── */
+.prose kbd {
+  @apply inline-block rounded border px-1.5 py-0.5 font-mono text-[0.8em] font-medium leading-none;
+  background: var(--muted);
+  border-color: var(--border);
+  color: var(--foreground);
+  box-shadow: 0 1px 0 1px var(--border);
+}
+
+/* ─── Links ─── */
+.prose a {
+  @apply underline underline-offset-2;
+  color: var(--primary);
+}
+
+/* ─── Lists ─── */
+.prose ul {
+  @apply list-disc list-outside ml-6 mb-4;
+  color: var(--foreground);
+}
+
+.prose ol {
+  @apply list-decimal list-outside ml-6 mb-4;
+  color: var(--foreground);
+}
+
+.prose li {
+  @apply mb-1;
+}
+
+.prose li > ul,
+.prose li > ol {
+  @apply mt-1 mb-0;
+}
+
+/* ─── Task list (GFM) ─── */
+.prose ul:has(> li > input[type="checkbox"]) {
+  @apply list-none ml-0 pl-0;
+}
+
+.prose li:has(> input[type="checkbox"]) {
+  @apply flex items-start gap-0;
+}
+
+.prose li > input[type="checkbox"] {
+  @apply mt-1.5 shrink-0;
+}
+
+/* ─── Blockquote ─── */
+.prose blockquote {
+  @apply border-l-[3px] pl-4 italic my-4;
+  border-color: var(--muted-foreground);
+  color: var(--muted-foreground);
+}
+
+.prose blockquote blockquote {
+  @apply mt-2;
+  border-color: var(--border);
+}
+
+/* ─── Horizontal rule ─── */
+.prose hr {
+  @apply my-6 border-none;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ─── Tables ─── */
+.prose table {
+  @apply border-collapse;
+}
+
+.prose th {
+  @apply font-semibold px-4 py-2 border text-left;
+  background: var(--muted);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+
+.prose td {
+  @apply px-4 py-2 border;
+  color: var(--foreground);
+  border-color: var(--border);
+}
+
+/* ─── Images ─── */
+.prose img {
+  @apply my-4 max-w-full h-auto rounded-lg;
+}
+
+.prose figure {
+  @apply my-4;
+}
+
+.prose figcaption {
+  @apply mt-2 text-center text-sm;
+  color: var(--muted-foreground);
+}
+
+/* ─── Details / Summary ─── */
+.prose details {
+  @apply my-4 rounded-lg border px-4 py-2;
+  background: var(--card);
+  border-color: var(--border);
+}
+
+.prose details:empty,
+.prose details:not(:has(> :not(summary))),
+.md-renderer details:empty,
+.md-renderer details:not(:has(> :not(summary))) {
+  display: none;
+}
+
+.prose > :empty:not(hr):not(br):not(img) {
+  display: none;
+}
+
+.prose summary {
+  @apply cursor-pointer font-medium select-none;
+  color: var(--foreground);
+}
+
+.prose details[open] > summary {
+  @apply mb-2;
+}
+
+/* ─── Definition list ─── */
+.prose dl {
+  @apply my-4;
+}
+
+.prose dt {
+  @apply font-semibold mt-3;
+  color: var(--foreground);
+}
+
+.prose dd {
+  @apply ml-6 mt-1;
+  color: var(--muted-foreground);
+}
+
+/* ─── Footnotes (remark-gfm) ─── */
+.prose .footnotes {
+  @apply mt-8 border-t pt-4 text-sm;
+  border-color: var(--border);
+  color: var(--muted-foreground);
+}
+
+.prose .footnotes ol {
+  @apply ml-4;
+}
+
+/* ─── md-renderer: scope overrides only inside our component ─── */
+.md-renderer .contains-task-list {
+  @apply list-none ml-0 pl-0;
+}
+
+/* Animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.35s ease-out forwards;
+}
+
+/* Session status pulse */
+@keyframes session-pulse {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(2.2);
+  }
+}
+
+.session-pulse {
+  animation: session-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

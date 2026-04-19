@@ -1,0 +1,13 @@
+﻿# Git backup
+deeptutor-src/.git.bak
+
+# Runtime binaries (large, distributed separately)
+runtime/
+
+# Environment files with secrets
+configs/.env
+**/.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
