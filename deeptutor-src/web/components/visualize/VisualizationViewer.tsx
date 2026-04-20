@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Code2, Copy, Check } from "lucide-react";
+import { Code2, Copy, Check, ExternalLink } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Mermaid } from "@/components/Mermaid";
+import { prepareIframeHtml } from "@/lib/iframe-html";
 import type { VisualizeResult } from "@/lib/visualize-types";
 
 function ChartJsRenderer({ config }: { config: string }) {
+  const { t } = useTranslation();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chartRef = useRef<unknown>(null);
   const [error, setError] = useState<string | null>(null);
@@ -35,7 +37,7 @@ function ChartJsRenderer({ config }: { config: string }) {
         setError(null);
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Failed to render chart");
+          setError(err instanceof Error ? err.message : t("Failed to render chart"));
         }
       }
     }
@@ -49,13 +51,13 @@ function ChartJsRenderer({ config }: { config: string }) {
         chartRef.current = null;
       }
     };
-  }, [config]);
+  }, [config, t]);
 
   if (error) {
     return (
       <div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-900/60 dark:bg-red-950/30">
         <p className="text-sm font-medium text-red-600 dark:text-red-400">
-          Chart rendering error
+          {t("Chart rendering error")}
         </p>
         <pre className="mt-2 whitespace-pre-wrap text-xs text-red-500">{error}</pre>
       </div>
@@ -69,25 +71,71 @@ function ChartJsRenderer({ config }: { config: string }) {
   );
 }
 
+function HtmlRenderer({ html }: { html: string }) {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const prepared = useMemo(() => prepareIframeHtml(html || ""), [html]);
+
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+    iframe.srcdoc = prepared;
+  }, [prepared]);
+
+  const handleOpenInNewTab = () => {
+    try {
+      const blob = new Blob([prepared], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      window.open(url, "_blank", "noopener,noreferrer");
+      // Best-effort cleanup; the new tab keeps its own reference.
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    } catch {
+      /* no-op */
+    }
+  };
+
+  return (
+    <div className="relative w-full">
+      <button
+        type="button"
+        onClick={handleOpenInNewTab}
+        className="absolute right-2 top-2 z-10 inline-flex items-center gap-1 rounded-md border border-[var(--border)] bg-[var(--background)]/90 px-2 py-1 text-[10px] font-medium text-[var(--muted-foreground)] backdrop-blur transition-colors hover:text-[var(--foreground)]"
+        title="Open in new tab"
+      >
+        <ExternalLink size={10} strokeWidth={1.8} />
+        Open
+      </button>
+      <iframe
+        ref={iframeRef}
+        title="HTML visualization"
+        sandbox="allow-scripts"
+        className="w-full rounded-lg border border-[var(--border)] bg-white"
+        style={{ minHeight: 480, height: 560 }}
+      />
+    </div>
+  );
+}
+
 function SvgRenderer({ svg }: { svg: string }) {
+  const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
 
   const sanitizedSvg = useMemo(() => {
     const trimmed = svg.trim();
     if (!trimmed.startsWith("<svg")) {
-      setError("Invalid SVG: does not start with <svg");
+      setError(t("Invalid SVG: does not start with <svg"));
       return "";
     }
     setError(null);
     return trimmed;
-  }, [svg]);
+  }, [svg, t]);
 
   if (error) {
     return (
       <div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-900/60 dark:bg-red-950/30">
         <p className="text-sm font-medium text-red-600 dark:text-red-400">
-          SVG rendering error
+          {t("SVG rendering error")}
         </p>
         <pre className="mt-2 whitespace-pre-wrap text-xs text-red-500">{error}</pre>
       </div>
@@ -125,11 +173,19 @@ export default function VisualizationViewer({
   return (
     <div className="space-y-3">
       {/* Visualization area */}
-      <div className="overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--background)] p-4">
+      <div
+        className={
+          result.render_type === "html"
+            ? "overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--background)]"
+            : "overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--background)] p-4"
+        }
+      >
         {result.render_type === "svg" ? (
           <SvgRenderer svg={result.code.content} />
         ) : result.render_type === "mermaid" ? (
           <Mermaid chart={result.code.content} />
+        ) : result.render_type === "html" ? (
+          <HtmlRenderer html={result.code.content} />
         ) : (
           <ChartJsRenderer config={result.code.content} />
         )}
@@ -160,7 +216,9 @@ export default function VisualizationViewer({
             ? "SVG"
             : result.render_type === "mermaid"
               ? `Mermaid · ${result.analysis.chart_type || "diagram"}`
-              : `Chart.js · ${result.analysis.chart_type || "chart"}`}
+              : result.render_type === "html"
+                ? `HTML · ${result.analysis.chart_type || "interactive"}`
+                : `Chart.js · ${result.analysis.chart_type || "chart"}`}
         </span>
       </div>
 

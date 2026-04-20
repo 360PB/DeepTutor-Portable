@@ -35,18 +35,42 @@ type TraceMetadata = {
   sources?: Array<Record<string, unknown>>;
 };
 
+type ResearchStageId = "understand" | "decompose" | "evidence" | "result";
+
 type ResearchStageCard = {
-  id: "understand" | "decompose" | "evidence" | "result";
+  id: ResearchStageId;
   title: string;
   hint: string;
   events: StreamEvent[];
 };
 
-const RESEARCH_STAGE_SPECS: Array<Pick<ResearchStageCard, "id" | "title" | "hint">> = [
-  { id: "understand", title: "理解问题", hint: "先澄清主题与研究目标。" },
-  { id: "decompose", title: "拆解主题", hint: "把问题拆成可检索、可学习的子主题。" },
-  { id: "evidence", title: "检索证据", hint: "结合所选 sources 收集和整理证据。" },
-  { id: "result", title: "形成结果", hint: "把证据整理成最终输出。" },
+// `title` and `hint` are i18n keys resolved via `t(...)` at render time so the
+// stage banner follows the active UI language instead of being locked to one.
+const RESEARCH_STAGE_SPECS: Array<{
+  id: ResearchStageId;
+  titleKey: string;
+  hintKey: string;
+}> = [
+  {
+    id: "understand",
+    titleKey: "research.stage.understand.title",
+    hintKey: "research.stage.understand.hint",
+  },
+  {
+    id: "decompose",
+    titleKey: "research.stage.decompose.title",
+    hintKey: "research.stage.decompose.hint",
+  },
+  {
+    id: "evidence",
+    titleKey: "research.stage.evidence.title",
+    hintKey: "research.stage.evidence.hint",
+  },
+  {
+    id: "result",
+    titleKey: "research.stage.result.title",
+    hintKey: "research.stage.result.hint",
+  },
 ];
 
 type TraceItem = { callId: string; events: StreamEvent[] };
@@ -62,21 +86,23 @@ function titleCase(value: string) {
   return value.replaceAll("_", " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-function humanizeQuestionId(value: string) {
-  return value.replace(/\bq_(\d+)\b/gi, "Question $1");
+function humanizeQuestionId(value: string, t?: (key: string, opts?: Record<string, unknown>) => string) {
+  return value.replace(/\bq_(\d+)\b/gi, (_match, n) =>
+    t ? t("Question {{n}}", { n }) : `Question ${n}`,
+  );
 }
 
 export function getTraceMeta(event: StreamEvent): TraceMetadata {
   return (event.metadata ?? {}) as TraceMetadata;
 }
 
-function getTraceLabel(events: StreamEvent[]) {
+function getTraceLabel(events: StreamEvent[], t?: (key: string, opts?: Record<string, unknown>) => string) {
   for (const event of events) {
     const meta = getTraceMeta(event);
-    if (meta.label) return humanizeQuestionId(String(meta.label));
+    if (meta.label) return humanizeQuestionId(String(meta.label), t);
   }
   const fallback = events[0]?.stage || "trace";
-  return humanizeQuestionId(titleCase(fallback));
+  return humanizeQuestionId(titleCase(fallback), t);
 }
 
 function getTraceCallKind(events: StreamEvent[]) {
@@ -141,8 +167,13 @@ function isTracePending(events: StreamEvent[]) {
   return hasRunning && !hasTerminal;
 }
 
-function getTraceHeader(events: StreamEvent[], nowSeconds?: number, nested?: boolean, t: (key: string) => string = (k) => k) {
-  const label = getTraceLabel(events);
+function getTraceHeader(
+  events: StreamEvent[],
+  nowSeconds?: number,
+  nested?: boolean,
+  t: (key: string, opts?: Record<string, unknown>) => string = (k) => k,
+) {
+  const label = getTraceLabel(events, t);
   const role = getTraceRole(events);
   const group = getTraceGroup(events);
   const kind = getTraceCallKind(events);
@@ -170,10 +201,10 @@ function getTraceHeader(events: StreamEvent[], nowSeconds?: number, nested?: boo
     title = t("Tool call");
   } else if (group === "react_round") {
     if (nested) {
-      title = meta.round ? `Round ${meta.round}` : label;
+      title = meta.round ? t("Round {{n}}", { n: meta.round }) : label;
     } else {
-      const step = meta.step_id ? `Step ${meta.step_id}` : "";
-      const round = meta.round ? `Round ${meta.round}` : label;
+      const step = meta.step_id ? t("Step {{n}}", { n: meta.step_id }) : "";
+      const round = meta.round ? t("Round {{n}}", { n: meta.round }) : label;
       title = [step, round].filter(Boolean).join(" · ");
     }
   } else if (role === "plan" && kind === "llm_planning") {
@@ -185,11 +216,14 @@ function getTraceHeader(events: StreamEvent[], nowSeconds?: number, nested?: boo
   } else if (role === "thought" || kind === "llm_reasoning") {
     title = t("Thought");
   } else if (kind === "llm_generation") {
-    if (/^generate\s+/i.test(label)) title = label.replace(/^generate\s+/i, "Generating ");
-    else if (/^write\s+/i.test(label)) title = label.replace(/^write\s+/i, "Writing ");
+    if (/^generate\s+/i.test(label)) {
+      title = t("Generating {{label}}", { label: label.replace(/^generate\s+/i, "") });
+    } else if (/^write\s+/i.test(label)) {
+      title = t("Writing {{label}}", { label: label.replace(/^write\s+/i, "") });
+    }
   }
 
-  return duration ? `${title} for ${duration}` : title;
+  return duration ? t("{{title}} for {{duration}}", { title, duration }) : title;
 }
 
 function getTraceText(events: StreamEvent[], eventTypes: Array<StreamEvent["type"]>) {
@@ -928,12 +962,15 @@ export function ResearchStagePanel({
   events: StreamEvent[];
   isStreaming?: boolean;
 }) {
+  const { t } = useTranslation();
   const cards = useMemo<ResearchStageCard[]>(() => {
     return RESEARCH_STAGE_SPECS.map((spec) => ({
-      ...spec,
+      id: spec.id,
+      title: t(spec.titleKey),
+      hint: t(spec.hintKey),
       events: events.filter((event) => getResearchStageId(event) === spec.id),
     })).filter((card) => card.events.length > 0);
-  }, [events]);
+  }, [events, t]);
 
   if (!cards.length) return null;
 

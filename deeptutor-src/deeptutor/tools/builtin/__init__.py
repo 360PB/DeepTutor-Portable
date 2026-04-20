@@ -83,7 +83,7 @@ class RAGTool(_PromptHintsMixin, BaseTool):
         extra_kwargs = {
             key: value
             for key, value in kwargs.items()
-            if key not in {"query", "kb_name", "mode", "event_sink"}
+            if key not in {"query", "kb_name", "event_sink"}
         }
 
         result = await rag_search(
@@ -511,8 +511,8 @@ BUILTIN_TOOL_TYPES: tuple[type[BaseTool], ...] = (
 BUILTIN_TOOL_NAMES: tuple[str, ...] = tuple(tool_type().name for tool_type in BUILTIN_TOOL_TYPES)
 
 TOOL_ALIASES: dict[str, tuple[str, dict[str, Any]]] = {
-    "rag_hybrid": ("rag", {}),
-    "rag_naive": ("rag", {}),
+    "rag_hybrid": ("rag", {"mode": "hybrid"}),
+    "rag_naive": ("rag", {"mode": "naive"}),
     "rag_search": ("rag", {}),
     "code_execute": ("code_execution", {}),
     "run_code": ("code_execution", {}),

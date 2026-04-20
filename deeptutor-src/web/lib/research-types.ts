@@ -97,13 +97,29 @@ export function buildResearchWSConfig(
   return result;
 }
 
-export function summarizeResearchConfig(cfg: DeepResearchFormConfig): string {
+const RESEARCH_MODE_LABELS: Record<string, string> = {
+  notes: "Study Notes",
+  report: "Report",
+  comparison: "Comparison",
+  learning_path: "Learning Path",
+};
+
+const RESEARCH_DEPTH_LABELS: Record<string, string> = {
+  quick: "Quick",
+  standard: "Standard",
+  deep: "Deep",
+  manual: "Manual",
+};
+
+export function summarizeResearchConfig(
+  cfg: DeepResearchFormConfig,
+  translate?: (key: string) => string,
+): string {
   const validation = validateResearchConfig(cfg);
-  if (!validation.valid) return "Incomplete settings";
-  const sourceSummary = cfg.sources.length ? cfg.sources.join("+") : "llm-only";
-  return [
-    cfg.mode.replace("_", " "),
-    cfg.depth,
-    sourceSummary,
-  ].join(" · ");
+  const tr = translate ?? ((s: string) => s);
+  if (!validation.valid) return tr("Incomplete settings");
+  const sourceSummary = cfg.sources.length ? cfg.sources.join("+") : tr("llm-only");
+  const modeLabel = RESEARCH_MODE_LABELS[cfg.mode] ?? cfg.mode.replace("_", " ");
+  const depthLabel = RESEARCH_DEPTH_LABELS[cfg.depth] ?? cfg.depth;
+  return [tr(modeLabel), tr(depthLabel), sourceSummary].join(" · ");
 }

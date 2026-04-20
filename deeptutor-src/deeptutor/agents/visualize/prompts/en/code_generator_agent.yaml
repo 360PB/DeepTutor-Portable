@@ -16,9 +16,25 @@ system: |
     sequenceDiagram, classDiagram, stateDiagram-v2, erDiagram, gantt, mindmap, etc.).
     Use clear node labels and readable edge descriptions. Do NOT use spaces in
     node IDs — use camelCase or underscores. Avoid reserved keywords as node IDs.
+  - If render_type is "html", output one complete, self-contained single-file HTML
+    learning page.
+    Technical constraints:
+      * Must include everything from <!DOCTYPE html> to </html>.
+      * Put all CSS inside <style>; put all JavaScript inside <script> before </body>.
+      * Do NOT rely on external CDNs, fonts, or other resources (KaTeX is injected
+        by the host page; use $...$ for inline math, $$...$$ for block math).
+      * The page will render inside an iframe — use max-width: 100% and
+        box-sizing: border-box, avoid fixed widths.
+      * For long content use overflow-x: auto when needed; never let content be
+        clipped.
+      * Wrap all interactions inside DOMContentLoaded and use addEventListener;
+        do NOT use inline onclick handlers.
+      * Always check that an element exists before manipulating it.
+    Within these constraints, freely choose layout, colors, visual style, and
+    interaction patterns to make the page clear, beautiful, and easy to learn from.
   - Do NOT include any explanation outside the code fence.
   - Wrap the code in a fenced code block with the appropriate language tag
-    (```svg, ```javascript, or ```mermaid).
+    (```svg, ```javascript, ```mermaid, or ```html).
 
 user_template: |
   User request:
@@ -36,3 +52,4 @@ user_template: |
   - For SVG: ```svg ... ```
   - For Chart.js: ```javascript ... ```
   - For Mermaid: ```mermaid ... ```
+  - For HTML: ```html ... ```

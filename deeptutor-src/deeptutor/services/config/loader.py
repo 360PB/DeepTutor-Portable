@@ -73,7 +73,6 @@ def _inject_runtime_paths(config: dict[str, Any]) -> dict[str, Any]:
         "knowledge_bases_dir": str(path_service.project_root / "data" / "knowledge_bases"),
         "user_log_dir": str(path_service.get_logs_dir()),
         "performance_log_dir": str(path_service.get_logs_dir() / "performance"),
-        "guide_output_dir": str(path_service.get_guide_dir()),
         "question_output_dir": str(path_service.get_chat_feature_dir("deep_question")),
         "research_output_dir": str(path_service.get_research_dir()),
         "research_reports_dir": str(path_service.get_research_reports_dir()),
@@ -209,7 +208,6 @@ def get_agent_params(module_name: str) -> dict:
 
     Args:
         module_name: Module name, one of:
-            - "guide": Guide module agents
             - "solve": Solve module agents
             - "research": Research module agents
             - "question": Question module agents
@@ -224,8 +222,8 @@ def get_agent_params(module_name: str) -> dict:
             - max_tokens: int, default 4096
 
     Example:
-        >>> params = get_agent_params("guide")
-        >>> params["temperature"]  # 0.5
+        >>> params = get_agent_params("solve")
+        >>> params["temperature"]  # 0.3
         >>> params["max_tokens"]   # 8192
     """
     defaults = {
@@ -236,7 +234,6 @@ def get_agent_params(module_name: str) -> dict:
         "solve": ("capabilities", "solve"),
         "research": ("capabilities", "research"),
         "question": ("capabilities", "question"),
-        "guide": ("capabilities", "guide"),
         "co_writer": ("capabilities", "co_writer"),
         "brainstorm": ("tools", "brainstorm"),
         "vision_solver": ("plugins", "vision_solver"),

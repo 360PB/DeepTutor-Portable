@@ -42,6 +42,8 @@ interface NotebookReferencePayload {
 
 type HistoryReferencePayload = string[];
 
+type QuestionNotebookReferencePayload = number[];
+
 export interface SendMessageOptions {
   displayUserMessage?: boolean;
   persistUserMessage?: boolean;
@@ -84,6 +86,7 @@ export interface MessageRequestSnapshot {
   config?: Record<string, unknown>;
   notebookReferences?: NotebookReferencePayload[];
   historyReferences?: HistoryReferencePayload;
+  questionNotebookReferences?: QuestionNotebookReferencePayload;
 }
 
 export interface MessageItem {
@@ -387,6 +390,7 @@ interface ChatContextValue {
     notebookReferences?: NotebookReferencePayload[],
     historyReferences?: HistoryReferencePayload,
     options?: SendMessageOptions,
+    questionNotebookReferences?: QuestionNotebookReferencePayload,
   ) => void;
   cancelStreamingTurn: () => void;
   newSession: () => void;
@@ -659,6 +663,7 @@ export function UnifiedChatProvider({ children }: { children: React.ReactNode })
       notebookReferences?: NotebookReferencePayload[],
       historyReferences?: HistoryReferencePayload,
       options?: SendMessageOptions,
+      questionNotebookReferences?: QuestionNotebookReferencePayload,
     ) => {
       const msgAttachments = attachments?.map((a) => ({
         type: a.type,
@@ -695,6 +700,9 @@ export function UnifiedChatProvider({ children }: { children: React.ReactNode })
         ...(config && Object.keys(config).length > 0 ? { config } : {}),
         ...(notebookReferences?.length ? { notebookReferences } : {}),
         ...(historyReferences?.length ? { historyReferences: [...historyReferences] } : {}),
+        ...(questionNotebookReferences?.length
+          ? { questionNotebookReferences: [...questionNotebookReferences] }
+          : {}),
       };
       if (options?.displayUserMessage !== false) {
         dispatch({
@@ -725,6 +733,9 @@ export function UnifiedChatProvider({ children }: { children: React.ReactNode })
           : {}),
         ...(historyReferences?.length
           ? { history_references: historyReferences }
+          : {}),
+        ...(questionNotebookReferences?.length
+          ? { question_notebook_references: questionNotebookReferences }
           : {}),
         ...(effectiveConfig && Object.keys(effectiveConfig).length > 0
           ? { config: effectiveConfig }

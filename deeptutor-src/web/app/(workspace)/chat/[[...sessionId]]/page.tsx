@@ -20,8 +20,9 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import type { SelectedRecord } from "@/app/(workspace)/guide/types";
+import type { SelectedRecord } from "@/lib/notebook-selection-types";
 import type { SelectedHistorySession } from "@/components/chat/HistorySessionPicker";
+import type { SelectedQuestionEntry } from "@/components/chat/QuestionBankPicker";
 import ChatComposer from "@/components/chat/home/ChatComposer";
 import { ChatMessageList } from "@/components/chat/home/ChatMessages";
 import { useUnifiedChat, type MessageRequestSnapshot } from "@/context/UnifiedChatContext";
@@ -63,6 +64,9 @@ const NotebookRecordPicker = dynamic(() => import("@/components/notebook/Noteboo
   ssr: false,
 });
 const HistorySessionPicker = dynamic(() => import("@/components/chat/HistorySessionPicker"), {
+  ssr: false,
+});
+const QuestionBankPicker = dynamic(() => import("@/components/chat/QuestionBankPicker"), {
   ssr: false,
 });
 const SaveToNotebookModal = dynamic(() => import("@/components/notebook/SaveToNotebookModal"), {
@@ -230,10 +234,12 @@ export default function ChatPage() {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [showNotebookPicker, setShowNotebookPicker] = useState(false);
   const [showHistoryPicker, setShowHistoryPicker] = useState(false);
+  const [showQuestionBankPicker, setShowQuestionBankPicker] = useState(false);
   const [toolMenuOpen, setToolMenuOpen] = useState(false);
   const [refMenuOpen, setRefMenuOpen] = useState(false);
   const [selectedNotebookRecords, setSelectedNotebookRecords] = useState<SelectedRecord[]>([]);
   const [selectedHistorySessions, setSelectedHistorySessions] = useState<SelectedHistorySession[]>([]);
+  const [selectedQuestionEntries, setSelectedQuestionEntries] = useState<SelectedQuestionEntry[]>([]);
   const dragCounter = useRef(0);
   const capMenuRef = useRef<HTMLDivElement>(null);
   const capBtnRef = useRef<HTMLButtonElement>(null);
@@ -284,6 +290,10 @@ export default function ChatPage() {
   const historyReferencesPayload = useMemo(
     () => selectedHistorySessions.map((session) => session.sessionId),
     [selectedHistorySessions],
+  );
+  const questionNotebookReferencesPayload = useMemo(
+    () => selectedQuestionEntries.map((entry) => entry.id),
+    [selectedQuestionEntries],
   );
   const chatSaveMessages = useMemo(
     () =>
@@ -342,6 +352,7 @@ export default function ChatPage() {
         snapshot.content, snapshot.attachments, configOverride ?? snapshot.config,
         snapshot.notebookReferences, snapshot.historyReferences,
         { displayUserMessage: false, persistUserMessage: false, requestSnapshotOverride: snapshot },
+        snapshot.questionNotebookReferences,
       );
       shouldAutoScrollRef.current = true;
     },
@@ -385,6 +396,7 @@ export default function ChatPage() {
             persistUserMessage: false,
             requestSnapshotOverride: answerNowSnapshot,
           },
+          answerNowSnapshot.questionNotebookReferences,
         );
         shouldAutoScrollRef.current = true;
       }, 0);
@@ -567,7 +579,7 @@ export default function ChatPage() {
   }, [fileToAttachment]);
 
   const handleSend = useCallback(async (content: string) => {
-    if ((!content && !attachments.length && !selectedNotebookRecords.length && !selectedHistorySessions.length) || state.isStreaming) return;
+    if ((!content && !attachments.length && !selectedNotebookRecords.length && !selectedHistorySessions.length && !selectedQuestionEntries.length) || state.isStreaming) return;
 
     let extraAttachments = attachments.map((a) => ({ type: a.type, filename: a.filename, base64: a.base64 }));
     let config: Record<string, unknown> | undefined;
@@ -585,11 +597,20 @@ export default function ChatPage() {
 
     sendMessage(
       content ||
-        (selectedNotebookRecords.length || selectedHistorySessions.length ? "Please use the selected context to help with this request." : "") ||
+        (selectedNotebookRecords.length ||
+        selectedHistorySessions.length ||
+        selectedQuestionEntries.length
+          ? "Please use the selected context to help with this request."
+          : "") ||
         (isMathAnimatorMode
           ? attachments.some((a) => a.type === "image") ? "Generate a math animation from the attached reference image(s)." : ""
           : attachments.some((a) => a.type === "image") ? "Please analyze the attached image(s)." : ""),
-      extraAttachments, config, notebookReferencesPayload, historyReferencesPayload,
+      extraAttachments,
+      config,
+      notebookReferencesPayload,
+      historyReferencesPayload,
+      undefined,
+      questionNotebookReferencesPayload,
     );
     shouldAutoScrollRef.current = true;
     // Auto-collapse the per-capability settings panel after sending so the
@@ -598,7 +619,8 @@ export default function ChatPage() {
     setAttachments([]);
     setSelectedNotebookRecords([]);
     setSelectedHistorySessions([]);
-  }, [attachments, historyReferencesPayload, isMathAnimatorMode, isQuizMode, isResearchMode, isVisualizeMode, mathAnimatorConfig, notebookReferencesPayload, quizConfig, quizPdf, researchConfig, selectedHistorySessions.length, selectedNotebookRecords.length, sendMessage, shouldAutoScrollRef, state.isStreaming, visualizeConfig]);
+    setSelectedQuestionEntries([]);
+  }, [attachments, historyReferencesPayload, isMathAnimatorMode, isQuizMode, isResearchMode, isVisualizeMode, mathAnimatorConfig, notebookReferencesPayload, questionNotebookReferencesPayload, quizConfig, quizPdf, researchConfig, selectedHistorySessions.length, selectedNotebookRecords.length, selectedQuestionEntries.length, sendMessage, shouldAutoScrollRef, state.isStreaming, visualizeConfig]);
 
   const handleConfirmOutline = useCallback(
     (outline: OutlineItem[], _topic: string, originalConfig?: Record<string, unknown> | null) => {
@@ -619,17 +641,23 @@ export default function ChatPage() {
   const handleSetKB = useCallback((kb: string) => { setKBs(kb ? [kb] : []); }, [setKBs]);
   const handleSelectNotebookPicker = useCallback(() => { setShowNotebookPicker(true); }, []);
   const handleSelectHistoryPicker = useCallback(() => { setShowHistoryPicker(true); }, []);
+  const handleSelectQuestionBankPicker = useCallback(() => { setShowQuestionBankPicker(true); }, []);
   const handleRemoveHistory = useCallback((sessionId: string) => {
     setSelectedHistorySessions((prev) => prev.filter((item) => item.sessionId !== sessionId));
   }, []);
   const handleRemoveNotebook = useCallback((notebookId: string) => {
     setSelectedNotebookRecords((prev) => prev.filter((record) => record.notebookId !== notebookId));
   }, []);
+  const handleRemoveQuestion = useCallback((entryId: number) => {
+    setSelectedQuestionEntries((prev) => prev.filter((entry) => entry.id !== entryId));
+  }, []);
   const handleTogglePanelCollapsed = useCallback(() => { setPanelCollapsed((prev) => !prev); }, []);
   const handleCloseNotebookPicker = useCallback(() => { setShowNotebookPicker(false); }, []);
   const handleApplyNotebookRecords = useCallback((records: SelectedRecord[]) => { setSelectedNotebookRecords(records); }, []);
   const handleCloseHistoryPicker = useCallback(() => { setShowHistoryPicker(false); }, []);
   const handleApplyHistorySessions = useCallback((sessions: SelectedHistorySession[]) => { setSelectedHistorySessions(sessions); }, []);
+  const handleCloseQuestionBankPicker = useCallback(() => { setShowQuestionBankPicker(false); }, []);
+  const handleApplyQuestionEntries = useCallback((entries: SelectedQuestionEntry[]) => { setSelectedQuestionEntries(entries); }, []);
   const handleCloseSaveModal = useCallback(() => { setShowSaveModal(false); }, []);
 
   const handleNewChat = useCallback(() => {
@@ -725,6 +753,7 @@ export default function ChatPage() {
           knowledgeBases={knowledgeBases}
           selectedNotebookRecords={selectedNotebookRecords}
           selectedHistorySessions={selectedHistorySessions}
+          selectedQuestionEntries={selectedQuestionEntries}
           notebookReferenceGroups={notebookReferenceGroups}
           stateKnowledgeBase={state.knowledgeBases[0] || ""}
           isStreaming={state.isStreaming}
@@ -747,12 +776,14 @@ export default function ChatPage() {
           onSetKB={handleSetKB}
           onSelectNotebookPicker={handleSelectNotebookPicker}
           onSelectHistoryPicker={handleSelectHistoryPicker}
+          onSelectQuestionBankPicker={handleSelectQuestionBankPicker}
           onToggleTool={toggleTool}
           onToggleResearchSource={toggleResearchSource}
           onSend={handleSend}
           onRemoveAttachment={removeAttachment}
           onRemoveHistory={handleRemoveHistory}
           onRemoveNotebook={handleRemoveNotebook}
+          onRemoveQuestion={handleRemoveQuestion}
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
           onDragOver={handleDragOver}
@@ -777,6 +808,11 @@ export default function ChatPage() {
         open={showHistoryPicker}
         onClose={handleCloseHistoryPicker}
         onApply={handleApplyHistorySessions}
+      />
+      <QuestionBankPicker
+        open={showQuestionBankPicker}
+        onClose={handleCloseQuestionBankPicker}
+        onApply={handleApplyQuestionEntries}
       />
       <SaveToNotebookModal
         open={showSaveModal}

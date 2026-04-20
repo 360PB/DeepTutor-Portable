@@ -35,6 +35,16 @@ class ReviewAgent(BaseAgent):
         analysis: VisualizationAnalysis,
         code: str,
     ) -> ReviewResult:
+        # HTML pages are 8-16k tokens of full single-file documents; a second
+        # LLM pass to "review" them costs another 30-60s with negligible
+        # quality gain. Skip the LLM review for html and return the code as-is.
+        if analysis.render_type == "html":
+            return ReviewResult(
+                optimized_code=code,
+                changed=False,
+                review_notes="Skipped LLM review for html render_type.",
+            )
+
         system_prompt = self.get_prompt("system")
         user_template = self.get_prompt("user_template")
         if not system_prompt or not user_template:

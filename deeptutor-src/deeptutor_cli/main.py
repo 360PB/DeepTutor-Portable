@@ -6,6 +6,7 @@ import typer
 from deeptutor.runtime.mode import RunMode, set_mode
 from deeptutor.services.setup import get_backend_port
 
+from .book import register as register_book
 from .bot import register as register_bot
 from .chat import register as register_chat
 from .common import build_turn_request, console, maybe_run
@@ -35,6 +36,7 @@ config_app = typer.Typer(help="Inspect configuration.")
 session_app = typer.Typer(help="Manage shared sessions.")
 notebook_app = typer.Typer(help="Manage notebooks and imported markdown records.")
 provider_app = typer.Typer(help="Manage provider OAuth login.")
+book_app = typer.Typer(help="Manage interactive Books (BookEngine).")
 
 app.add_typer(bot_app, name="bot")
 app.add_typer(chat_app, name="chat")
@@ -45,6 +47,7 @@ app.add_typer(config_app, name="config")
 app.add_typer(session_app, name="session")
 app.add_typer(notebook_app, name="notebook")
 app.add_typer(provider_app, name="provider")
+app.add_typer(book_app, name="book")
 
 register_bot(bot_app)
 register_chat(chat_app)
@@ -55,6 +58,7 @@ register_config(config_app)
 register_session(session_app)
 register_notebook(notebook_app)
 register_provider(provider_app)
+register_book(book_app)
 
 
 @app.command("run")

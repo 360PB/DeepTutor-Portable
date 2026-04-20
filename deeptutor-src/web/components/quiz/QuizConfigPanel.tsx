@@ -45,7 +45,7 @@ export default function QuizConfigPanel({
   return (
     <CollapsibleConfigSection
       collapsed={collapsed}
-      summary={summarizeQuizConfig(value)}
+      summary={summarizeQuizConfig(value, t)}
       onToggleCollapsed={onToggleCollapsed}
       bodyClassName="px-3.5 pb-2.5 space-y-2.5"
     >
@@ -68,7 +68,7 @@ export default function QuizConfigPanel({
 
       {value.mode === "custom" ? (
         <div className="flex flex-wrap items-end gap-x-3 gap-y-2">
-          <Field label="Count" width="w-[60px]">
+          <Field label={t("Count")} width="w-[60px]">
             <input
               type="number"
               min={1}
@@ -81,7 +81,7 @@ export default function QuizConfigPanel({
             />
           </Field>
 
-          <Field label="Difficulty" width="w-[100px]">
+          <Field label={t("Difficulty")} width="w-[100px]">
             <select
               value={value.difficulty}
               onChange={(e) => update("difficulty", e.target.value)}
@@ -94,7 +94,7 @@ export default function QuizConfigPanel({
             </select>
           </Field>
 
-          <Field label="Type" width="w-[110px]">
+          <Field label={t("Type")} width="w-[110px]">
             <select
               value={value.question_type}
               onChange={(e) => update("question_type", e.target.value)}
@@ -107,7 +107,7 @@ export default function QuizConfigPanel({
             </select>
           </Field>
 
-          <Field label="Preference" width="min-w-[140px] flex-1">
+          <Field label={t("Preference")} width="min-w-[140px] flex-1">
             <input
               type="text"
               value={value.preference}
@@ -119,7 +119,7 @@ export default function QuizConfigPanel({
         </div>
       ) : (
         <div className="flex flex-wrap items-end gap-x-3 gap-y-2">
-          <Field label="Paper" width="min-w-[180px] flex-[1.3]">
+          <Field label={t("Paper")} width="min-w-[180px] flex-[1.3]">
             {uploadedPdf ? (
               <div className="flex h-[30px] items-center gap-2 rounded-lg border border-[var(--border)]/30 bg-[var(--background)]/50 px-2.5 text-[12px]">
                 <FileText size={12} className="shrink-0 text-[var(--primary)]/60" />
@@ -175,7 +175,7 @@ export default function QuizConfigPanel({
             )}
           </Field>
 
-          <Field label="Parsed Dir" width="min-w-[120px] flex-1">
+          <Field label={t("Parsed Dir")} width="min-w-[120px] flex-1">
             <input
               type="text"
               value={value.paper_path}
@@ -188,7 +188,7 @@ export default function QuizConfigPanel({
             />
           </Field>
 
-          <Field label="Max" width="w-[60px]">
+          <Field label={t("Max")} width="w-[60px]">
             <input
               type="number"
               min={1}

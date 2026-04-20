@@ -5,7 +5,7 @@ LLM Service
 Unified LLM service for all DeepTutor modules.
 
 Architecture:
-    Agents (ChatAgent, GuideAgent, etc.)
+    Agents (ChatAgent, SolveAgent, etc.)
               ↓
          BaseAgent.call_llm() / stream_llm()
               ↓

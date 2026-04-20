@@ -161,7 +161,6 @@ RUN mkdir -p \
     data/user/workspace/notebook \
     data/user/workspace/co-writer/audio \
     data/user/workspace/co-writer/tool_calls \
-    data/user/workspace/guide \
     data/user/workspace/chat/chat \
     data/user/workspace/chat/deep_solve \
     data/user/workspace/chat/deep_question \

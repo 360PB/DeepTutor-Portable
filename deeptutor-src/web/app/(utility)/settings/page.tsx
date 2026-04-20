@@ -895,7 +895,7 @@ function SettingsPageContent() {
                       : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
                   }`}
                 >
-                  {v === "en" ? "English" : "中文"}
+                  {v === "en" ? t("language.english") : t("language.chinese")}
                 </button>
               ))}
             </div>

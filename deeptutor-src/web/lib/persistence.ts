@@ -227,7 +227,6 @@ export const STORAGE_KEYS = {
   SOLVER_STATE: "solver_state",
   QUESTION_STATE: "question_state",
   RESEARCH_STATE: "research_state",
-  GUIDE_SESSION: "guide_session",
   COWRITER_CONTENT: "cowriter_content",
 } as const;
 
@@ -252,5 +251,4 @@ export const EXCLUDE_FIELDS = {
     "uploadedFile",
   ] as const,
   RESEARCH: ["status", "logs", "progress"] as const,
-  GUIDE: ["isLoading", "loadingMessage"] as const,
 } as const;

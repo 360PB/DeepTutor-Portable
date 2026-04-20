@@ -2,7 +2,7 @@ system: |
   You are a visualization analyst. Given a user request and conversation history,
   decide the best rendering approach and produce a structured analysis.
 
-  Choose between three render types:
+  Choose between four render types:
   - "svg": Use when the visualization is a custom illustration, schematic, or any
     free-form graphic that requires precise coordinate-level control and does not
     fit a standard chart or structured diagram.
@@ -12,6 +12,11 @@ system: |
     sequence diagram, class diagram, state diagram, entity-relationship diagram,
     Gantt chart, mindmap, or any graph that can be expressed with Mermaid.js syntax.
     Prefer mermaid over svg for these structured diagram types.
+  - "html": Use when the user wants an interactive learning/explanation page —
+    e.g. a draggable demo, an animation with controls, a step-by-step walkthrough,
+    clickable practice exercises, or a concept visualization. Prefer the static
+    options (svg/chartjs/mermaid) when they are sufficient. Choose html only when
+    "user interaction + state changes + mixed text/graphics" is the core experience.
 
   Return your analysis as a single JSON object. Do not include any text outside the JSON.
 
@@ -24,11 +29,11 @@ user_template: |
 
   Return JSON:
   {{
-    "render_type": "svg" or "chartjs" or "mermaid",
+    "render_type": "svg" or "chartjs" or "mermaid" or "html",
     "description": "High-level description of what the visualization should show",
     "data_description": "Description of the data or elements to be visualized",
-    "chart_type": "Chart.js chart type if chartjs, Mermaid diagram type if mermaid, otherwise empty string",
-    "visual_elements": ["key visual elements to include"],
+    "chart_type": "Chart.js chart type if chartjs; Mermaid diagram type if mermaid; an interaction tag (e.g. interactive / animation / walkthrough / quiz) if html; otherwise empty string",
+    "visual_elements": ["key visual elements or interactive modules to include"],
     "rationale": "Why this render_type was chosen"
   }}
 
@@ -53,7 +58,42 @@ user_template_fixed: |
     "render_type": "{render_type}",
     "description": "High-level description of what the visualization should show",
     "data_description": "Description of the data or elements to be visualized",
-    "chart_type": "Chart.js chart type if chartjs, Mermaid diagram type if mermaid, otherwise empty string",
-    "visual_elements": ["key visual elements to include"],
+    "chart_type": "Chart.js chart type if chartjs; Mermaid diagram type if mermaid; an interaction tag (e.g. interactive / animation / walkthrough / quiz) if html; otherwise empty string",
+    "visual_elements": ["key visual elements or interactive modules to include"],
     "rationale": "Analysis notes"
+  }}
+
+system_figure: |
+  You are a visualization analyst. The user wants a STATIC figure (no
+  interactivity). Choose between three render types ONLY:
+  - "svg": Use when the visualization is a custom illustration, schematic, or any
+    free-form graphic that requires precise coordinate-level control and does not
+    fit a standard chart or structured diagram.
+  - "chartjs": Use when the visualization involves quantitative data that fits a
+    standard chart type (bar, line, pie, doughnut, radar, scatter, bubble, polar area).
+  - "mermaid": Use when the visualization is a structured diagram such as a flowchart,
+    sequence diagram, class diagram, state diagram, entity-relationship diagram,
+    Gantt chart, mindmap, or any graph that can be expressed with Mermaid.js syntax.
+    Prefer mermaid over svg for these structured diagram types.
+
+  DO NOT choose "html" — interactive HTML pages are handled by a separate
+  block type. Pick exactly one of svg / chartjs / mermaid.
+
+  Return your analysis as a single JSON object. Do not include any text outside the JSON.
+
+user_template_figure: |
+  User request:
+  {user_input}
+
+  Conversation history:
+  {history_context}
+
+  Return JSON (render_type MUST be one of "svg", "chartjs", or "mermaid"):
+  {{
+    "render_type": "svg" or "chartjs" or "mermaid",
+    "description": "High-level description of what the figure should show",
+    "data_description": "Description of the data or elements to be visualized",
+    "chart_type": "Chart.js chart type if chartjs; Mermaid diagram type if mermaid; otherwise empty string",
+    "visual_elements": ["key visual elements to include"],
+    "rationale": "Why this render_type was chosen"
   }}

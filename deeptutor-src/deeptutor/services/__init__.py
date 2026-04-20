@@ -34,7 +34,7 @@ Usage:
 
     # Prompt
     pm = get_prompt_manager()
-    prompts = pm.load_prompts("guide", "tutor_agent")
+    prompts = pm.load_prompts("solve", "solve_agent")
 
     # Search
     result = web_search("What is AI?")

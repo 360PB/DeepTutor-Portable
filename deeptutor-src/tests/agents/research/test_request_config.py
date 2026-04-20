@@ -38,7 +38,7 @@ def test_build_research_execution_policy_maps_intent_to_internal_settings() -> N
     assert policy["planning"]["rephrase"]["enabled"] is True
     assert policy["planning"]["decompose"]["mode"] == "manual"
     assert policy["researching"]["execution_mode"] == "parallel"
-    assert policy["researching"]["enable_rag_hybrid"] is True
+    assert policy["researching"]["enable_rag"] is True
     assert policy["researching"]["enable_web_search"] is False
     assert policy["researching"]["enable_paper_search"] is True
     assert policy["researching"]["enable_run_code"] is True
@@ -60,8 +60,7 @@ def test_build_research_execution_policy_supports_llm_only_mode() -> None:
         enabled_tools=set(),
     )
 
-    assert policy["researching"]["enable_rag_hybrid"] is False
-    assert policy["researching"]["enable_rag_naive"] is False
+    assert policy["researching"]["enable_rag"] is False
     assert policy["researching"]["enable_web_search"] is False
     assert policy["researching"]["enable_paper_search"] is False
     assert policy["researching"]["enable_run_code"] is False
@@ -101,16 +100,14 @@ def test_build_research_runtime_config_uses_intent_and_sources() -> None:
     assert runtime["researching"]["max_iterations"] == 3
     assert runtime["researching"]["execution_mode"] == "series"
     assert runtime["researching"]["enable_web_search"] is True
-    assert runtime["researching"]["enable_rag_hybrid"] is False
+    assert runtime["researching"]["enable_rag"] is False
     assert runtime["reporting"]["style"] == "learning_path"
     assert "outline_contract" not in runtime["reporting"]
     assert runtime["queue"]["max_length"] == 5
     assert runtime["rag"]["kb_name"] == "research-kb"
-    assert runtime["intent"] == {
-        "mode": "learning_path",
-        "depth": "standard",
-        "sources": ["web"],
-    }
+    assert runtime["intent"]["mode"] == "learning_path"
+    assert runtime["intent"]["depth"] == "standard"
+    assert runtime["intent"]["sources"] == ["web"]
 
 
 def test_reporting_mode_contracts_live_in_prompt_files() -> None:

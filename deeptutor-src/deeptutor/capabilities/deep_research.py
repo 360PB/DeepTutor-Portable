@@ -398,45 +398,22 @@ class DeepResearchCapability(BaseCapability):
             format_trace_summary,
             join_chunks,
             labeled_block,
+            load_answer_now_prompts,
             make_skip_notice,
             stream_synthesis,
         )
 
-        is_zh = context.language.lower().startswith("zh")
         original = str(payload.get("original_user_message") or context.user_message).strip()
         partial = str(payload.get("partial_response") or "").strip()
         trace_summary = format_trace_summary(payload.get("events"), language=context.language)
 
-        if is_zh:
-            system_prompt = (
-                "你是 DeepTutor 的研究报告写作组件。用户已经在等待，"
-                "请根据当前已经收集到的研究 trace（包括 rephrase、decompose、检索结果、"
-                "笔记/纲要等）直接输出一篇结构清晰的研究报告。"
-                "不要再继续检索或调用工具。如果证据稀薄，请在报告中标注信息覆盖度。"
-                "使用 Markdown，包含 1) 引言、2) 主体小节（按你能识别的子主题）、3) 结论。"
-            )
-            user_prompt = (
-                f"研究主题：{original}\n\n"
-                f"{labeled_block('Current Draft', partial)}\n\n"
-                f"{labeled_block('Research Trace', trace_summary)}\n\n"
-                "请基于以上材料立即输出最终报告。"
-            )
-        else:
-            system_prompt = (
-                "You are DeepTutor's research-report writer. The user is "
-                "waiting, so produce a structured research report right now "
-                "from whatever evidence has streamed so far (rephrase, "
-                "decompose, search hits, notes/outline, ...). Do not retrieve "
-                "more evidence and do not call tools. If coverage is thin, "
-                "say so explicitly in the report. Use Markdown with: 1) intro, "
-                "2) body sections (one per identifiable subtopic), 3) conclusion."
-            )
-            user_prompt = (
-                f"Research topic: {original}\n\n"
-                f"{labeled_block('Current Draft', partial)}\n\n"
-                f"{labeled_block('Research Trace', trace_summary)}\n\n"
-                "Produce the final research report from this material now."
-            )
+        prompts = load_answer_now_prompts("research", context.language)
+        system_prompt = str(prompts.get("system", "")).strip()
+        user_prompt = str(prompts.get("user_template", "")).format(
+            original=original,
+            current_draft=labeled_block("Current Draft", partial),
+            research_trace=labeled_block("Research Trace", trace_summary),
+        )
 
         trace_meta = build_answer_now_trace_metadata(
             capability=self.name, phase="reporting", label="Answer now"

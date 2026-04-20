@@ -13,7 +13,7 @@ Compatibility:
     directly, this wrapper can be removed.
 
 Architecture:
-    Agents (ChatAgent, GuideAgent, etc.)
+    Agents (ChatAgent, SolveAgent, etc.)
               ↓
          BaseAgent.call_llm() / stream_llm()
               ↓

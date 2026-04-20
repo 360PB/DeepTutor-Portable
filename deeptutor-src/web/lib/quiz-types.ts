@@ -125,18 +125,23 @@ function titleCase(value: string): string {
 
 /**
  * One-line summary of the quiz form, shown next to the collapsed `Settings`
- * chevron in the composer.
+ * chevron in the composer. Pass `translate` (`t` from `react-i18next`) so the
+ * summary follows the active UI language.
  */
-export function summarizeQuizConfig(cfg: DeepQuestionFormConfig): string {
+export function summarizeQuizConfig(
+  cfg: DeepQuestionFormConfig,
+  translate?: (key: string) => string,
+): string {
+  const tr = translate ?? ((s: string) => s);
   if (cfg.mode === "mimic") {
-    const target = cfg.paper_path.trim() || "no paper";
-    return ["Mimic", target, `max ${cfg.max_questions}`].join(" · ");
+    const target = cfg.paper_path.trim() || tr("no paper");
+    return [tr("Mimic Paper"), target, `${tr("Max")} ${cfg.max_questions}`].join(" · ");
   }
   return [
-    "Custom",
-    `${cfg.num_questions}q`,
-    titleCase(cfg.difficulty || "auto"),
-    titleCase(cfg.question_type || "auto"),
+    tr("Custom"),
+    `${cfg.num_questions} ${tr("questions")}`,
+    tr(titleCase(cfg.difficulty || "auto")),
+    tr(titleCase(cfg.question_type || "auto")),
   ].join(" · ");
 }
 

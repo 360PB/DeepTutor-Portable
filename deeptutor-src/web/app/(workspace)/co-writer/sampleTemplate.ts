@@ -107,8 +107,7 @@ ${FENCE}json
   "default_capability": "chat",
   "enabled_tools": ["rag", "web_search", "code_execution", "reason"],
   "ui": {
-    "co_writer_template": true,
-    "notebook_export": true
+    "co_writer_template": true
   }
 }
 ${FENCE}
@@ -136,14 +135,14 @@ ${FENCE}
 
 1. Draft a concept note
 2. Ask AI to refine it
-3. Save it to a notebook
+3. Export the polished markdown
 
 ### Tables
 
 Feature       | Description
 ------------- | -------------
 Co-Writer     | Draft and refine Markdown content
-Notebook      | Save and organize outputs
+Chat          | Ask questions and iterate ideas
 Research      | Build structured multi-step reports
 
 | Capability    | Primary Use Case                     |
@@ -191,7 +190,7 @@ ${FENCE}
 
 ${FENCE}seq
 Student->DeepTutor: Ask for help
-DeepTutor->Notebook: Load context
+DeepTutor->KnowledgeBase: Load context
 Note right of DeepTutor: Collect memory\nand relevant knowledge
 DeepTutor-->Student: Return guided response
 Student->>DeepTutor: Request rewrite in co-writer

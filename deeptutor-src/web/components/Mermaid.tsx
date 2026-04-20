@@ -91,7 +91,7 @@ export const Mermaid: React.FC<MermaidProps> = ({ chart, className = "" }) => {
       } catch (err) {
         cleanupMermaidOrphans(id);
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Failed to render diagram");
+          setError(err instanceof Error ? err.message : t("Failed to render diagram"));
         }
       }
     };
@@ -100,7 +100,7 @@ export const Mermaid: React.FC<MermaidProps> = ({ chart, className = "" }) => {
     return () => {
       cancelled = true;
     };
-  }, [stable, chart, id]);
+  }, [stable, chart, id, t]);
 
   if (error) {
     return (

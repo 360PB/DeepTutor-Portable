@@ -15,8 +15,20 @@ system: |
     classDiagram、stateDiagram-v2、erDiagram、gantt、mindmap 等）。
     使用清晰的节点标签和可读的边描述。节点 ID 不要使用空格——使用
     camelCase 或下划线。避免使用保留关键词作为节点 ID。
+  - 如果 render_type 是 "html"，输出一个完整的、自包含的单文件 HTML 学习页面。
+    技术约束：
+      * 必须从 <!DOCTYPE html> 写到 </html>
+      * 所有 CSS 写在 <style> 中，所有 JavaScript 写在 </body> 前的 <script> 中
+      * 不依赖外部 CDN、字体或其他资源（KaTeX 会由宿主页面自动注入；行内公式用
+        $...$，块级公式用 $$...$$）
+      * 页面会渲染在 iframe 中，必须响应式适配：使用 max-width: 100%、
+        box-sizing: border-box，避免固定宽度
+      * 长内容必要时用 overflow-x: auto，避免被截断
+      * 所有交互必须包在 DOMContentLoaded 中，使用 addEventListener，禁止 onclick
+      * 操作 DOM 前检查元素是否存在
+    在以上约束内自由决定布局、配色、视觉风格和交互形式，让页面清晰、美观、易学。
   - 不要在代码块之外包含任何解释。
-  - 用带有适当语言标签的代码块包裹代码（```svg、```javascript 或 ```mermaid）。
+  - 用带有适当语言标签的代码块包裹代码（```svg、```javascript、```mermaid 或 ```html）。
 
 user_template: |
   用户请求：
@@ -34,3 +46,4 @@ user_template: |
   - SVG 使用：```svg ... ```
   - Chart.js 使用：```javascript ... ```
   - Mermaid 使用：```mermaid ... ```
+  - HTML 使用：```html ... ```

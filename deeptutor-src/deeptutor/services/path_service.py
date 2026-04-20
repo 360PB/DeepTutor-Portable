@@ -12,7 +12,7 @@ data/user/
     ├── memory/
     ├── notebook/
     ├── co-writer/
-    ├── guide/
+    ├── book/
     └── chat/
         ├── chat/
         ├── deep_solve/
@@ -31,7 +31,6 @@ AgentModule = Literal[
     "question",
     "research",
     "co-writer",
-    "guide",
     "run_code_workspace",
     "logs",
     "math_animator",
@@ -50,8 +49,8 @@ WorkspaceFeature = Literal[
     "memory",
     "notebook",
     "co-writer",
-    "guide",
     "chat",
+    "book",
 ]
 
 
@@ -67,7 +66,6 @@ class PathService:
         "research": ("chat", "deep_research"),
         "math_animator": ("chat", "math_animator"),
         "co-writer": ("co-writer", None),
-        "guide": ("guide", None),
         "run_code_workspace": ("chat", "_detached_code_execution"),
     }
     _PRIVATE_SUFFIXES = {".json", ".sqlite", ".db", ".md", ".yaml", ".yml", ".py", ".log"}
@@ -185,7 +183,7 @@ class PathService:
     def _resolve_feature_root(self, feature: str) -> Path:
         if feature in {"chat", "deep_solve", "deep_question", "deep_research", "math_animator", "_detached_code_execution"}:
             return self.get_chat_feature_dir(feature)  # type: ignore[arg-type]
-        if feature in {"memory", "notebook", "co-writer", "guide"}:
+        if feature in {"memory", "notebook", "co-writer", "book"}:
             return self.get_workspace_feature_dir(feature)  # type: ignore[arg-type]
         raise ValueError(f"Unknown workspace feature: {feature}")
 
@@ -266,11 +264,57 @@ class PathService:
     def get_co_writer_audio_dir(self) -> Path:
         return self.get_co_writer_dir() / "audio"
 
-    def get_guide_dir(self) -> Path:
-        return self.get_workspace_feature_dir("guide")
+    def get_co_writer_docs_dir(self) -> Path:
+        """Root directory holding co-writer documents (one sub-directory per doc)."""
+        return self.get_co_writer_dir() / "documents"
 
-    def get_guide_session_file(self, session_id: str) -> Path:
-        return self.get_guide_dir() / f"session_{session_id}.json"
+    def get_co_writer_doc_root(self, doc_id: str) -> Path:
+        """Per-document root directory."""
+        return self.get_co_writer_docs_dir() / f"doc_{doc_id}"
+
+    def get_co_writer_doc_manifest(self, doc_id: str) -> Path:
+        return self.get_co_writer_doc_root(doc_id) / "manifest.json"
+
+    # ── Book Engine paths ────────────────────────────────────────────────
+
+    def get_book_dir(self) -> Path:
+        """Root directory holding all books (one sub-directory per book)."""
+        return self.get_workspace_feature_dir("book")
+
+    def get_book_root(self, book_id: str) -> Path:
+        """Per-book root directory."""
+        return self.get_book_dir() / f"book_{book_id}"
+
+    def get_book_manifest_file(self, book_id: str) -> Path:
+        return self.get_book_root(book_id) / "manifest.json"
+
+    def get_book_spine_file(self, book_id: str) -> Path:
+        return self.get_book_root(book_id) / "spine.json"
+
+    def get_book_progress_file(self, book_id: str) -> Path:
+        return self.get_book_root(book_id) / "progress.json"
+
+    def get_book_inputs_file(self, book_id: str) -> Path:
+        return self.get_book_root(book_id) / "inputs.json"
+
+    def get_book_log_file(self, book_id: str) -> Path:
+        return self.get_book_root(book_id) / "log.md"
+
+    def get_book_pages_dir(self, book_id: str) -> Path:
+        return self.get_book_root(book_id) / "pages"
+
+    def get_book_page_file(self, book_id: str, page_id: str) -> Path:
+        return self.get_book_pages_dir(book_id) / f"{page_id}.json"
+
+    def get_book_assets_dir(self, book_id: str) -> Path:
+        return self.get_book_root(book_id) / "assets"
+
+    def ensure_book_root(self, book_id: str) -> Path:
+        root = self.get_book_root(book_id)
+        root.mkdir(parents=True, exist_ok=True)
+        (root / "pages").mkdir(parents=True, exist_ok=True)
+        (root / "assets").mkdir(parents=True, exist_ok=True)
+        return root
 
     def get_run_code_workspace_dir(self) -> Path:
         return self.get_chat_feature_dir("_detached_code_execution")
@@ -314,7 +358,7 @@ class PathService:
         self.ensure_memory_dir()
         self.ensure_notebook_dir()
         self.get_logs_dir().mkdir(parents=True, exist_ok=True)
-        for feature in ("co-writer", "guide"):
+        for feature in ("co-writer", "book"):
             self.get_workspace_feature_dir(feature).mkdir(parents=True, exist_ok=True)
         for feature in (
             "chat",

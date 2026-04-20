@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Bot } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 
 interface RecentBot {
@@ -44,25 +43,7 @@ export function TutorBotRecent({ collapsed = false }: { collapsed?: boolean }) {
 
   if (bots.length === 0) return null;
 
-  if (collapsed) {
-    return (
-      <div className="flex flex-col items-center gap-0.5 pb-0.5 pt-px">
-        {bots.map((bot) => (
-          <Link
-            key={bot.bot_id}
-            href={`/agents/${bot.bot_id}/chat`}
-            title={bot.name}
-            className="relative rounded-md p-1.5 text-[var(--muted-foreground)]/70 transition-colors hover:bg-[var(--background)]/50 hover:text-[var(--foreground)]"
-          >
-            <Bot size={12} strokeWidth={1.5} />
-            {bot.running && (
-              <span className="absolute right-0.5 top-0.5 h-1.5 w-1.5 rounded-full bg-emerald-400 ring-1 ring-[var(--secondary)]" />
-            )}
-          </Link>
-        ))}
-      </div>
-    );
-  }
+  if (collapsed) return null;
 
   return (
     <div className="ml-5 border-l border-[var(--border)]/30 py-1">

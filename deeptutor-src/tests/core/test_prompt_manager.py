@@ -50,16 +50,6 @@ class TestPromptManager:
         )
         assert isinstance(prompts, dict)
 
-    def test_load_prompts_guide_module(self):
-        """Test loading prompts for guide module."""
-        pm = get_prompt_manager()
-        prompts = pm.load_prompts(
-            module_name="guide",
-            agent_name="chat_agent",
-            language="en",
-        )
-        assert isinstance(prompts, dict)
-
     def test_load_prompts_with_subdirectory(self):
         """Test loading prompts with subdirectory (e.g., solve_loop)."""
         pm = get_prompt_manager()
@@ -89,7 +79,7 @@ class TestPromptManager:
 
         # Load some prompts
         pm.load_prompts("research", "research_agent", "en")
-        pm.load_prompts("guide", "chat_agent", "en")
+        pm.load_prompts("solve", "solve_agent", "en")
 
         assert len(pm._cache) >= 2
 
@@ -102,15 +92,13 @@ class TestPromptManager:
 
         # Load prompts for multiple modules
         pm.load_prompts("research", "research_agent", "en")
-        pm.load_prompts("guide", "chat_agent", "en")
-
-        initial_count = len(pm._cache)
+        pm.load_prompts("solve", "solve_agent", "en")
 
         # Clear only research cache
         pm.clear_cache("research")
 
-        # Guide prompts should still be cached
-        assert any("guide" in k for k in pm._cache)
+        # Solve prompts should still be cached
+        assert any("solve" in k for k in pm._cache)
         assert not any("research" in k for k in pm._cache)
 
     def test_get_prompt_helper(self):
@@ -172,13 +160,13 @@ class TestPromptManagerLanguages:
     def test_english_prompts(self):
         """Test loading English prompts."""
         pm = get_prompt_manager()
-        prompts = pm.load_prompts("guide", "chat_agent", "en")
+        prompts = pm.load_prompts("solve", "solve_agent", "en")
         assert isinstance(prompts, dict)
 
     def test_chinese_prompts(self):
         """Test loading Chinese prompts."""
         pm = get_prompt_manager()
-        prompts = pm.load_prompts("guide", "chat_agent", "zh")
+        prompts = pm.load_prompts("solve", "solve_agent", "zh")
         assert isinstance(prompts, dict)
 
     def test_invalid_language_falls_back(self):

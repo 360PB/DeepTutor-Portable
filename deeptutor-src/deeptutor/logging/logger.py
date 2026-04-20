@@ -8,7 +8,6 @@ Format: [LEVEL]   [Module]  Message
 Example outputs:
     [INFO]     [Solver]        Ready in 2.3s
     [INFO]     [Research]      Starting deep research...
-    [INFO]     [Guide]         Compiling knowledge points
     [INFO]     [Knowledge]     Indexed 150 documents
     [ERROR]    [EmbeddingClient]  Embedding request failed
 """
@@ -160,7 +159,7 @@ class Logger:
         Initialize logger.
 
         Args:
-            name: Module name (e.g., "Solver", "Research", "Guide")
+            name: Module name (e.g., "Solver", "Research", "Book")
             level: Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
             console_output: Whether to output to console
             file_output: Whether to output to file

@@ -18,26 +18,34 @@
 
 [核心亮点](#key-features) · [快速开始](#get-started) · [探索 DeepTutor](#explore-deeptutor) · [TutorBot](#tutorbot) · [CLI](#deeptutor-cli-guide) · [路线图](#roadmap) · [社区](#community)
 
-[🇬🇧 English](../../README.md) · [🇯🇵 日本語](README_JA.md) · [🇪🇸 Español](README_ES.md) · [🇫🇷 Français](README_FR.md) · [🇸🇦 العربية](README_AR.md) · [🇷🇺 Русский](README_RU.md) · [🇮🇳 हिन्दी](README_HI.md) · [🇵🇹 Português](README_PT.md)
+[🇬🇧 English](../../README.md) · [🇯🇵 日本語](README_JA.md) · [🇪🇸 Español](README_ES.md) · [🇫🇷 Français](README_FR.md) · [🇸🇦 العربية](README_AR.md) · [🇷🇺 Русский](README_RU.md) · [🇮🇳 हिन्दी](README_HI.md) · [🇵🇹 Português](README_PT.md) · [🇹🇭 ภาษาไทย](README_TH.md)
 
 </div>
 
 ---
-### 📰 动态
-
-> **[2026.4.4]** 好久不见！✨ DeepTutor v1.0.0 终于到来 —— 在 Apache-2.0 许可下的智能体原生演进：自底向上架构重写、TutorBot、灵活模式切换。新篇章开启，故事继续！
-
-> **[2026.2.6]** 🚀 仅用 39 天即突破 10k star！感谢社区的大力支持！
-
-> **[2026.1.1]** 新年快乐！欢迎加入 [Discord](https://discord.gg/eRsjPgMU4t)、[微信](https://github.com/HKUDS/DeepTutor/issues/78) 或 [Discussions](https://github.com/HKUDS/DeepTutor/discussions)，一起塑造 DeepTutor 的未来！
-
-> **[2025.12.29]** DeepTutor 正式发布！
-
 ### 📦 版本发布
 
-> **[2026.4.7]** [v1.0.0-beta.2](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.2) — 运行时缓存失效以支持热更新设置、MinerU 嵌套输出、mimic WebSocket 修复、最低 Python 3.11+，以及 CI 改进。
+> **[2026.4.18]** [v1.1.2](https://github.com/HKUDS/DeepTutor/releases/tag/v1.1.2) — 基于 Schema 的「频道」标签页与密钥脱敏；RAG 收敛为单一流水线；RAG/知识库一致性加固；聊天提示词外置；以及泰语 README。
 
-> **[2026.4.4]** [v1.0.0-beta.1](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.1) — 智能体原生架构重写（DeepTutor 2.0）：双层插件模型（Tools + Capabilities）、CLI 与 SDK 入口、TutorBot 多渠道机器人、Co-Writer、引导式学习与持久记忆。
+> **[2026.4.17]** [v1.1.1](https://github.com/HKUDS/DeepTutor/releases/tag/v1.1.1) — 全能力通用「立即回答」；Co-Writer 滚动同步；保存到笔记本时的消息选择；统一设置面板；流式「停止」按钮；TutorBot 配置原子写入。
+
+> **[2026.4.15]** [v1.1.0](https://github.com/HKUDS/DeepTutor/releases/tag/v1.1.0) — LaTeX 块级公式解析重构；通过 `agents.yaml` 的 LLM 诊断探测；额外请求头转发修复；SaveToNotebook UUID 修复；Docker 与本地 LLM 使用说明。
+
+> **[2026.4.14]** [v1.1.0-beta](https://github.com/HKUDS/DeepTutor/releases/tag/v1.1.0-beta) — 基于 URL 的可收藏会话；Snow 主题；WebSocket 心跳与自动重连；ChatComposer 性能修复；嵌入提供商注册表重构；Serper 搜索提供商。
+
+> **[2026.4.13]** [v1.0.3](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.3) — 带书签与分类的测验笔记本；Visualize 支持 Mermaid；嵌入模型不一致检测；Qwen/vLLM 兼容；LM Studio 与 llama.cpp 支持；Glass 主题。
+
+> **[2026.4.11]** [v1.0.2](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.2) — 搜索整合与 SearXNG 回退；提供商切换修复；前端资源泄漏修复。
+
+> **[2026.4.10]** [v1.0.1](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.1) — Visualize 能力（Chart.js/SVG）；测验去重；o4-mini 模型支持。
+
+> **[2026.4.10]** [v1.0.0-beta.4](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.4) — 嵌入进度与限流重试；跨平台依赖修复；MIME 校验修复。
+
+> **[2026.4.8]** [v1.0.0-beta.3](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.3) — 原生 OpenAI/Anthropic SDK（移除 litellm）；Windows 数学动画支持；JSON 解析更健壮；完整中文 i18n。
+
+> **[2026.4.7]** [v1.0.0-beta.2](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.2) — 热重载设置；MinerU 嵌套输出；WebSocket 修复；最低 Python 3.11+。
+
+> **[2026.4.4]** [v1.0.0-beta.1](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.1) — 智能体原生架构重写（约 20 万行）：Tools + Capabilities 插件模型、CLI 与 SDK、TutorBot、Co-Writer、引导式学习与持久记忆。
 
 <details>
 <summary><b>历史版本</b></summary>
@@ -56,6 +64,16 @@
 
 </details>
 
+### 📰 动态
+
+> **[2026.4.4]** 好久不见！✨ DeepTutor v1.0.0 终于到来 —— 在 Apache-2.0 许可下的智能体原生演进：自底向上架构重写、TutorBot、灵活模式切换。新篇章开启，故事继续！
+
+> **[2026.2.6]** 🚀 仅用 39 天即突破 10k star！感谢社区的大力支持！
+
+> **[2026.1.1]** 新年快乐！欢迎加入 [Discord](https://discord.gg/eRsjPgMU4t)、[微信](https://github.com/HKUDS/DeepTutor/issues/78) 或 [Discussions](https://github.com/HKUDS/DeepTutor/discussions)，一起塑造 DeepTutor 的未来！
+
+> **[2025.12.29]** DeepTutor 正式发布！
+
 <a id="key-features"></a>
 ## ✨ 核心亮点
 
@@ -72,6 +90,19 @@
 <a id="get-started"></a>
 ## 🚀 快速开始
 
+### 前提条件
+
+在开始之前，请确保系统已安装：
+
+| 依赖 | 版本 | 检查命令 | 说明 |
+|:---|:---|:---|:---|
+| [Git](https://git-scm.com/) | 任意 | `git --version` | 用于克隆仓库 |
+| [Python](https://www.python.org/downloads/) | 3.11+ | `python --version` | 后端运行时 |
+| [Node.js](https://nodejs.org/) | 18+ | `node --version` | 前端构建（仅 CLI 或 Docker 可不装） |
+| [npm](https://www.npmjs.com/) | 9+ | `npm --version` | 一般随 Node.js 附带 |
+
+你还需要至少一个 LLM 提供商的 **API Key**（例如 [OpenAI](https://platform.openai.com/api-keys)、[DeepSeek](https://platform.deepseek.com/)、[Anthropic](https://console.anthropic.com/)）。设置向导会引导你填写并完成连通性测试。
+
 ### 方案 A — 引导式安装（推荐）
 
 **一条交互脚本**完成依赖安装、环境配置、连通性检测与启动，无需手改 `.env`。
@@ -80,9 +111,10 @@
 git clone https://github.com/HKUDS/DeepTutor.git
 cd DeepTutor
 
-# 创建 Python 环境
-conda create -n deeptutor python=3.11 && conda activate deeptutor
-# 或：python -m venv .venv && source .venv/bin/activate
+# 创建 Python 虚拟环境（任选其一）：
+conda create -n deeptutor python=3.11 && conda activate deeptutor   # 若使用 Anaconda/Miniconda
+python -m venv .venv && source .venv/bin/activate                    # 否则（macOS/Linux）
+python -m venv .venv && .venv\Scripts\activate                       # 否则（Windows）
 
 # 启动引导
 python scripts/start_tour.py
@@ -90,10 +122,18 @@ python scripts/start_tour.py
 
 向导会询问使用方式：
 
-- **Web 模式**（推荐）— 选择依赖配置、安装 pip + npm、拉起临时服务并在浏览器打开**设置**页；四步引导配置 LLM、嵌入与搜索并现场测通；完成后自动按配置重启。
-- **CLI 模式** — 全终端交互：选配置、装依赖、配提供商、验证连接并应用，无需离开 shell。
+- **Web 模式**（推荐）— 安装全部依赖（pip + npm）、拉起临时服务并在浏览器打开 **设置** 页；四步引导配置 LLM、嵌入与搜索提供商并现场测通；完成后 DeepTutor 会按你的配置自动重启。
+- **CLI 模式** — 全终端交互：选择依赖配置、安装依赖、配置提供商、验证连接并应用，全程不离开 shell。
 
-完成后访问 [http://localhost:3782](http://localhost:3782)。
+任一方式完成后，在 [http://localhost:3782](http://localhost:3782) 使用 DeepTutor。
+
+> **日常启动** — 引导只需运行一次。之后请用：
+>
+> ```bash
+> python scripts/start_web.py
+> ```
+>
+> 该命令会同时启动后端与前端并自动打开浏览器。仅在需要更换提供商或重装依赖时再运行 `start_tour.py`。
 
 <a id="option-b-manual"></a>
 ### 方案 B — 本地手动安装
@@ -106,10 +146,13 @@ python scripts/start_tour.py
 git clone https://github.com/HKUDS/DeepTutor.git
 cd DeepTutor
 
+# 创建并激活 Python 虚拟环境（与方案 A 相同）
 conda create -n deeptutor python=3.11 && conda activate deeptutor
+
+# 安装 DeepTutor（后端 + Web 服务依赖）
 pip install -e ".[server]"
 
-# 前端
+# 安装前端依赖（需要 Node.js 18+）
 cd web && npm install && cd ..
 ```
 
@@ -152,6 +195,8 @@ EMBEDDING_DIMENSION=3072
 | Gemini | `gemini` | `https://generativelanguage.googleapis.com/v1beta/openai/` |
 | GitHub Copilot | `github_copilot` | `https://api.githubcopilot.com` |
 | Groq | `groq` | `https://api.groq.com/openai/v1` |
+| llama.cpp | `llama_cpp` | `http://localhost:8080/v1` |
+| LM Studio | `lm_studio` | `http://localhost:1234/v1` |
 | MiniMax | `minimax` | `https://api.minimax.io/v1` |
 | Mistral | `mistral` | `https://api.mistral.ai/v1` |
 | Moonshot (Kimi) | `moonshot` | `https://api.moonshot.ai/v1` |
@@ -174,16 +219,17 @@ EMBEDDING_DIMENSION=3072
 <details>
 <summary><b>支持的嵌入（Embedding）提供商</b></summary>
 
-嵌入使用与 LLM 相同的提供商列表。常见选择：
+| 提供商 | Binding | 模型示例 | 默认维度 |
+|:--|:--|:--|:--|
+| OpenAI | `openai` | `text-embedding-3-large` | 3072 |
+| Azure OpenAI | `azure_openai` | 部署名称 | — |
+| Cohere | `cohere` | `embed-v4.0` | 1024 |
+| Jina | `jina` | `jina-embeddings-v3` | 1024 |
+| Ollama | `ollama` | `nomic-embed-text` | 768 |
+| vLLM / LM Studio | `vllm` | 任意嵌入模型 | — |
+| 任意 OpenAI 兼容 | `custom` | — | — |
 
-| 提供商 | Binding | 模型示例 |
-|:--|:--|:--|
-| OpenAI | `openai` | `text-embedding-3-large` |
-| DashScope | `dashscope` | `text-embedding-v3` |
-| Ollama | `ollama` | `nomic-embed-text` |
-| SiliconFlow | `siliconflow` | `BAAI/bge-m3` |
-| vLLM | `vllm` | 任意嵌入模型 |
-| 任意 OpenAI 兼容 | `custom` | — |
+与 OpenAI 兼容的提供商（DashScope、SiliconFlow 等）可通过 `custom` 或 `openai` binding 使用。
 
 </details>
 
@@ -203,6 +249,16 @@ EMBEDDING_DIMENSION=3072
 
 **3. 启动服务**
 
+最快方式（一条命令启动前后端）：
+
+```bash
+python scripts/start_web.py
+```
+
+该命令会同时启动后端与前端并自动打开浏览器。
+
+也可在两个终端分别手动启动：
+
 ```bash
 # 后端（FastAPI）
 python -m deeptutor.api.run_server
@@ -220,7 +276,7 @@ cd web && npm run dev -- -p 3782
 
 ### 方案 C — Docker 部署
 
-Docker 将前后端打包为单容器，本机无需 Python/Node。任选其一：
+Docker 将前后端打包为单容器，本机无需安装 Python 或 Node.js。仅需 [Docker Desktop](https://www.docker.com/products/docker-desktop/)（或 Linux 上的 Docker Engine + Compose）。
 
 **1. 配置环境变量**（两种方式均需）
 
@@ -350,6 +406,17 @@ docker compose up -d     # 或 docker compose -f docker-compose.ghcr.yml up -d
 
 ```bash
 pip install -e ".[cli]"
+```
+
+仍需配置 LLM 提供商，最快方式：
+
+```bash
+cp .env.example .env   # 然后编辑 .env 填入 API Key 等
+```
+
+配置完成后即可使用：
+
+```bash
 deeptutor chat                                   # 交互 REPL
 deeptutor run chat "Explain Fourier transform"   # 单次能力调用
 deeptutor run deep_solve "Solve x^2 = 4"         # 多智能体解题
@@ -395,7 +462,7 @@ deeptutor kb create my-kb --doc textbook.pdf     # 构建知识库
 
 Co-Writer 把聊天的智能放进写作界面：完整 Markdown 编辑器，AI 是**一等协作者**，而非侧栏挂件。
 
-划选文本即可**改写**、**扩写**或**缩写**，可选用知识库或网络上下文；支持撤销/重做，作品可存入笔记本，回流学习生态。
+划选文本即可**改写**、**扩写**或**精简**，可选用知识库或网络上下文；支持撤销/重做，作品可存入笔记本，回流学习生态。
 
 ### 🎓 引导式学习 — 可视化、分步掌握
 
@@ -595,8 +662,10 @@ deeptutor session open <id>
 
 | 状态 | 里程碑 |
 |:---:|:---|
-| 🔜 | **身份认证与登录** — 面向公网部署的可选登录页与多用户支持 |
-| 🔜 | **主题与外观** — 多种主题与可定制界面 |
+| 🎯 | **身份认证与登录** — 面向公网部署的可选登录页与多用户支持 |
+| 🎯 | **主题与外观** — 多种主题与可定制界面 |
+| 🎯 | **交互体验优化** — 优化图标设计与交互细节 |
+| 🔜 | **更强记忆** — 集成更完善的记忆管理 |
 | 🔜 | **LightRAG 集成** — 将 [LightRAG](https://github.com/HKUDS/LightRAG) 作为高阶知识库引擎接入 |
 | 🔜 | **文档站点** — 含指南、API 参考与教程的完整文档站 |
 
@@ -649,6 +718,16 @@ DeepTutor 受益于优秀开源项目：
 </a>
 
 </div>
+
+<p align="center">
+ <a href="https://www.star-history.com/hkuds/deeptutor">
+  <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/badge?repo=HKUDS/DeepTutor&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/badge?repo=HKUDS/DeepTutor" />
+   <img alt="Star History Rank" src="https://api.star-history.com/badge?repo=HKUDS/DeepTutor" />
+  </picture>
+ </a>
+</p>
 
 <div align="center">
 

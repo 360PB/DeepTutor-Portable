@@ -18,13 +18,13 @@ def test_resolve_config_path_returns_existing_config(tmp_path: Path) -> None:
     assert used_alias is False
 
 
-def test_load_config_with_main_merges_main_and_module_config(tmp_path: Path) -> None:
+def test_load_config_with_main_loads_config_file(tmp_path: Path) -> None:
+    """``load_config_with_main`` reads the requested config file and injects
+    runtime paths. It no longer auto-merges main.yaml — callers that need
+    layered defaults are expected to do that explicitly.
+    """
     settings_dir = tmp_path / "data" / "user" / "settings"
     settings_dir.mkdir(parents=True)
-    (settings_dir / "main.yaml").write_text(
-        "system:\n  language: en\nsolve:\n  max_replans: 2\n",
-        encoding="utf-8",
-    )
     (settings_dir / "custom.yaml").write_text(
         "solve:\n  max_replans: 5\nlogging:\n  level: INFO\n",
         encoding="utf-8",
@@ -32,7 +32,6 @@ def test_load_config_with_main_merges_main_and_module_config(tmp_path: Path) -> 
 
     config = load_config_with_main("custom.yaml", tmp_path)
 
-    assert config["system"]["language"] == "en"
     assert config["solve"]["max_replans"] == 5
     assert config["logging"]["level"] == "INFO"
 

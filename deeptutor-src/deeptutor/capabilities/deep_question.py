@@ -215,11 +215,11 @@ class DeepQuestionCapability(BaseCapability):
             format_trace_summary,
             join_chunks,
             labeled_block,
+            load_answer_now_prompts,
             make_skip_notice,
             stream_synthesis,
         )
 
-        is_zh = context.language.lower().startswith("zh")
         original = str(payload.get("original_user_message") or context.user_message).strip()
         partial = str(payload.get("partial_response") or "").strip()
         trace_summary = format_trace_summary(payload.get("events"), language=context.language)
@@ -230,46 +230,16 @@ class DeepQuestionCapability(BaseCapability):
         difficulty = str(overrides.get("difficulty", "") or "auto")
         question_type = str(overrides.get("question_type", "") or "auto")
 
-        if is_zh:
-            system_prompt = (
-                "你是 DeepTutor 的题目生成器。用户已经在等待，请基于现有信息直接输出一组题目。"
-                "严格输出 JSON：{\"questions\": [{\"question_id\": \"q_1\", "
-                "\"question\": \"...\", \"question_type\": \"choice|written|coding\", "
-                "\"options\": {\"A\": \"...\"}, \"correct_answer\": \"...\", "
-                "\"explanation\": \"...\", \"difficulty\": \"...\", "
-                "\"concentration\": \"...\"}, ...]}。"
-                "若不是 choice 题，options 字段可省略。所有字符串使用 UTF-8。"
-            )
-            user_prompt = (
-                f"用户原始问题/主题：{topic}\n\n"
-                f"题量要求：{num_questions}\n"
-                f"题型偏好：{question_type}（auto 表示自由选择）\n"
-                f"难度偏好：{difficulty}\n\n"
-                f"{labeled_block('Current Draft', partial)}\n\n"
-                f"{labeled_block('Execution Trace', trace_summary)}\n\n"
-                "立即输出符合上述 JSON schema 的题目集合，不要包含其他文字。"
-            )
-        else:
-            system_prompt = (
-                "You are DeepTutor's question generator. The user is waiting, "
-                "so produce a complete question set in one shot using the "
-                "context already gathered. Output strictly the JSON schema "
-                "{\"questions\": [{\"question_id\": \"q_1\", \"question\": "
-                "\"...\", \"question_type\": \"choice|written|coding\", "
-                "\"options\": {\"A\": \"...\"}, \"correct_answer\": \"...\", "
-                "\"explanation\": \"...\", \"difficulty\": \"...\", "
-                "\"concentration\": \"...\"}, ...]}. Omit ``options`` when the "
-                "type is not ``choice``."
-            )
-            user_prompt = (
-                f"Topic: {topic}\n\n"
-                f"Number of questions requested: {num_questions}\n"
-                f"Preferred type: {question_type} (auto = free choice)\n"
-                f"Preferred difficulty: {difficulty}\n\n"
-                f"{labeled_block('Current Draft', partial)}\n\n"
-                f"{labeled_block('Execution Trace', trace_summary)}\n\n"
-                "Emit the JSON object now, no surrounding prose."
-            )
+        prompts = load_answer_now_prompts("question", context.language)
+        system_prompt = str(prompts.get("system", "")).strip()
+        user_prompt = str(prompts.get("user_template", "")).format(
+            topic=topic,
+            num_questions=num_questions,
+            question_type=question_type,
+            difficulty=difficulty,
+            current_draft=labeled_block("Current Draft", partial),
+            execution_trace=labeled_block("Execution Trace", trace_summary),
+        )
 
         trace_meta = build_answer_now_trace_metadata(
             capability=self.name, phase="generation", label="Answer now"

@@ -51,27 +51,6 @@ def register(app: typer.Typer) -> None:
                 f"{record.get('title', '')}"
             )
 
-    @app.command("add-md")
-    def add_md(
-        notebook_id: str = typer.Argument(..., help="Notebook id."),
-        path: str = typer.Argument(..., help="Path to markdown file."),
-    ) -> None:
-        """Import a markdown file as a co-writer notebook record."""
-        client = DeepTutorApp()
-        result = client.import_markdown_into_notebook(notebook_id, path)
-        console.print(json.dumps(result, ensure_ascii=False, indent=2, default=str))
-
-    @app.command("replace-md")
-    def replace_md(
-        notebook_id: str = typer.Argument(..., help="Notebook id."),
-        record_id: str = typer.Argument(..., help="Existing record id."),
-        path: str = typer.Argument(..., help="Path to markdown file."),
-    ) -> None:
-        """Replace an existing co-writer notebook record in-place."""
-        client = DeepTutorApp()
-        record = client.replace_markdown_record(notebook_id, record_id, path)
-        console.print(json.dumps(record, ensure_ascii=False, indent=2, default=str))
-
     @app.command("remove-record")
     def remove_record(
         notebook_id: str = typer.Argument(..., help="Notebook id."),

@@ -11,13 +11,18 @@ from pydantic import BaseModel
 
 import json
 
-from deeptutor.agents.co_writer.edit_agent import (
+from deeptutor.co_writer.edit_agent import (
     TOOL_CALLS_DIR,
     EditAgent,
     load_history,
     print_stats,
     save_history,
     save_tool_call,
+)
+from deeptutor.co_writer.storage import (
+    CoWriterDocument,
+    CoWriterDocumentSummary,
+    get_co_writer_storage,
 )
 from deeptutor.agents.chat.agentic_pipeline import AgenticChatPipeline
 from deeptutor.core.context import UnifiedContext
@@ -501,5 +506,130 @@ async def export_markdown(content: dict):
             headers={"Content-Disposition": f"attachment; filename={filename}"},
         )
     except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Document CRUD (multi-project Co-Writer)
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+class CreateDocumentRequest(BaseModel):
+    title: str | None = None
+    content: str = ""
+
+
+class UpdateDocumentRequest(BaseModel):
+    title: str | None = None
+    content: str | None = None
+
+
+class DocumentResponse(BaseModel):
+    id: str
+    title: str
+    content: str
+    created_at: float
+    updated_at: float
+
+    @classmethod
+    def from_model(cls, doc: CoWriterDocument) -> "DocumentResponse":
+        return cls(
+            id=doc.id,
+            title=doc.title,
+            content=doc.content,
+            created_at=doc.created_at,
+            updated_at=doc.updated_at,
+        )
+
+
+class DocumentSummaryResponse(BaseModel):
+    id: str
+    title: str
+    created_at: float
+    updated_at: float
+    preview: str = ""
+
+    @classmethod
+    def from_summary(cls, summary: CoWriterDocumentSummary) -> "DocumentSummaryResponse":
+        return cls(
+            id=summary.id,
+            title=summary.title,
+            created_at=summary.created_at,
+            updated_at=summary.updated_at,
+            preview=summary.preview,
+        )
+
+
+@router.get("/documents")
+async def list_documents() -> dict[str, list[DocumentSummaryResponse]]:
+    """List all Co-Writer documents (summary view, sorted by recency)."""
+    try:
+        storage = get_co_writer_storage()
+        summaries = storage.list_documents()
+        return {"documents": [DocumentSummaryResponse.from_summary(s) for s in summaries]}
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/documents", response_model=DocumentResponse)
+async def create_document(request: CreateDocumentRequest) -> DocumentResponse:
+    """Create a new Co-Writer document."""
+    try:
+        storage = get_co_writer_storage()
+        document = storage.create_document(title=request.title, content=request.content)
+        return DocumentResponse.from_model(document)
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/documents/{doc_id}", response_model=DocumentResponse)
+async def get_document(doc_id: str) -> DocumentResponse:
+    """Get a single Co-Writer document by id."""
+    try:
+        storage = get_co_writer_storage()
+        document = storage.load_document(doc_id)
+        if document is None:
+            raise HTTPException(status_code=404, detail="Document not found")
+        return DocumentResponse.from_model(document)
+    except HTTPException:
+        raise
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.put("/documents/{doc_id}", response_model=DocumentResponse)
+async def update_document(doc_id: str, request: UpdateDocumentRequest) -> DocumentResponse:
+    """Update a Co-Writer document (title and/or content)."""
+    try:
+        storage = get_co_writer_storage()
+        document = storage.update_document(
+            doc_id, title=request.title, content=request.content
+        )
+        if document is None:
+            raise HTTPException(status_code=404, detail="Document not found")
+        return DocumentResponse.from_model(document)
+    except HTTPException:
+        raise
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.delete("/documents/{doc_id}")
+async def delete_document(doc_id: str) -> dict[str, bool]:
+    """Delete a Co-Writer document."""
+    try:
+        storage = get_co_writer_storage()
+        if not storage.doc_exists(doc_id):
+            raise HTTPException(status_code=404, detail="Document not found")
+        success = storage.delete_document(doc_id)
+        return {"deleted": success}
+    except HTTPException:
+        raise
+    except Exception as e:
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 

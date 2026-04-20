@@ -29,11 +29,6 @@ AGENT_REGISTRY = {
         "color": "amber",
         "label_key": "Co-Writer",
     },
-    "guide": {
-        "icon": "BookOpen",
-        "color": "indigo",
-        "label_key": "Guided Learning",
-    },
 }
 
 

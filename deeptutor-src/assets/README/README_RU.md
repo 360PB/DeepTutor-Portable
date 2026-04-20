@@ -18,26 +18,34 @@
 
 [Возможности](#key-features) · [Быстрый старт](#get-started) · [Обзор](#explore-deeptutor) · [TutorBot](#tutorbot) · [CLI](#deeptutor-cli-guide) · [Дорожная карта](#roadmap) · [Сообщество](#community)
 
-[🇬🇧 English](../../README.md) · [🇨🇳 中文](README_CN.md) · [🇯🇵 日本語](README_JA.md) · [🇪🇸 Español](README_ES.md) · [🇫🇷 Français](README_FR.md) · [🇸🇦 العربية](README_AR.md) · [🇮🇳 हिन्दी](README_HI.md) · [🇵🇹 Português](README_PT.md)
+[🇬🇧 English](../../README.md) · [🇨🇳 中文](README_CN.md) · [🇯🇵 日本語](README_JA.md) · [🇪🇸 Español](README_ES.md) · [🇫🇷 Français](README_FR.md) · [🇸🇦 العربية](README_AR.md) · [🇮🇳 हिन्दी](README_HI.md) · [🇵🇹 Português](README_PT.md) · [🇹🇭 ภาษาไทย](README_TH.md)
 
 </div>
 
 ---
-### 📰 Новости
-
-> **[2026.4.4]** Давно не виделись! ✨ Вышел DeepTutor v1.0.0 — агентно-нативная эволюция: архитектура переписана с нуля, TutorBot и гибкие режимы под Apache-2.0. Начинается новая глава!
-
-> **[2026.2.6]** 🚀 10k звёзд за 39 дней — спасибо сообществу!
-
-> **[2026.1.1]** С Новым годом! [Discord](https://discord.gg/eRsjPgMU4t), [WeChat](https://github.com/HKUDS/DeepTutor/issues/78), [Discussions](https://github.com/HKUDS/DeepTutor/discussions).
-
-> **[2025.12.29]** Официальный релиз DeepTutor.
-
 ### 📦 Релизы
 
-> **[2026.4.7]** [v1.0.0-beta.2](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.2) — инвалидация кэша во время выполнения для горячей перезагрузки настроек, вложенный вывод MinerU, исправление mimic WebSocket, минимум Python 3.11+ и улучшения CI.
+> **[2026.4.18]** [v1.1.2](https://github.com/HKUDS/DeepTutor/releases/tag/v1.1.2) — вкладка Channels на схеме с маскировкой секретов; единый конвейер RAG; укрепление согласованности RAG/KB; вынесенные промпты чата; README на тайском.
 
-> **[2026.4.4]** [v1.0.0-beta.1](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.1) — агентно-нативная переработка архитектуры (DeepTutor 2.0): двухуровневая модель плагинов (Tools + Capabilities), входы CLI и SDK, многоканальный TutorBot, Co-Writer, Guided Learning и постоянная память.
+> **[2026.4.17]** [v1.1.1](https://github.com/HKUDS/DeepTutor/releases/tag/v1.1.1) — универсальный «Ответить сейчас» во всех возможностях; синхронизация прокрутки Co-Writer; выбор сообщений при сохранении в блокнот; единая панель настроек; кнопка Stop при стриминге; атомарная запись конфигурации TutorBot.
+
+> **[2026.4.15]** [v1.1.0](https://github.com/HKUDS/DeepTutor/releases/tag/v1.1.0) — переработка разбора блочных формул LaTeX; LLM-диагностика через `agents.yaml`; исправление пересылки дополнительных заголовков; исправление UUID в SaveToNotebook; руководство по Docker и локальным LLM.
+
+> **[2026.4.14]** [v1.1.0-beta](https://github.com/HKUDS/DeepTutor/releases/tag/v1.1.0-beta) — сессии с URL-закладками; тема Snow; heartbeat WebSocket и авто-переподключение; ускорение ChatComposer; переработка реестра провайдеров эмбеддингов; провайдер поиска Serper.
+
+> **[2026.4.13]** [v1.0.3](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.3) — блокнот вопросов с закладками и категориями; Mermaid в Visualize; обнаружение несоответствия эмбеддингов; совместимость Qwen/vLLM; поддержка LM Studio и llama.cpp; тема Glass.
+
+> **[2026.4.11]** [v1.0.2](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.2) — консолидация поиска с резервом SearXNG; исправление переключения провайдера; утечки ресурсов на фронтенде.
+
+> **[2026.4.10]** [v1.0.1](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.1) — возможность Visualize (Chart.js/SVG); защита от дубликатов тестов; поддержка модели o4-mini.
+
+> **[2026.4.10]** [v1.0.0-beta.4](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.4) — прогресс эмбеддингов с повтором при лимите; кроссплатформенные зависимости; проверка MIME.
+
+> **[2026.4.8]** [v1.0.0-beta.3](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.3) — нативные SDK OpenAI/Anthropic (без litellm); Math Animator на Windows; более устойчичный разбор JSON; полная китайская i18n.
+
+> **[2026.4.7]** [v1.0.0-beta.2](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.2) — горячая перезагрузка настроек; вложенный вывод MinerU; исправление WebSocket; минимум Python 3.11+.
+
+> **[2026.4.4]** [v1.0.0-beta.1](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.1) — агентно-нативная переработка (~200k строк): плагины Tools + Capabilities, CLI и SDK, TutorBot, Co-Writer, Guided Learning и постоянная память.
 
 <details>
 <summary><b>Прошлые релизы</b></summary>
@@ -56,6 +64,16 @@
 
 </details>
 
+### 📰 Новости
+
+> **[2026.4.4]** Давно не виделись! ✨ Вышел DeepTutor v1.0.0 — агентно-нативная эволюция: архитектура переписана с нуля, TutorBot и гибкие режимы под Apache-2.0. Начинается новая глава!
+
+> **[2026.2.6]** 🚀 10k звёзд за 39 дней — спасибо сообществу!
+
+> **[2026.1.1]** С Новым годом! [Discord](https://discord.gg/eRsjPgMU4t), [WeChat](https://github.com/HKUDS/DeepTutor/issues/78), [Discussions](https://github.com/HKUDS/DeepTutor/discussions).
+
+> **[2025.12.29]** Официальный релиз DeepTutor.
+
 <a id="key-features"></a>
 ## ✨ Ключевые возможности
 
@@ -72,48 +90,87 @@
 <a id="get-started"></a>
 ## 🚀 Быстрый старт
 
+### Предварительные требования
+
+Перед началом убедитесь, что установлено:
+
+| Требование | Версия | Проверка | Примечание |
+|:---|:---|:---|:---|
+| [Git](https://git-scm.com/) | любая | `git --version` | для клонирования |
+| [Python](https://www.python.org/downloads/) | 3.11+ | `python --version` | backend |
+| [Node.js](https://nodejs.org/) | 18+ | `node --version` | сборка фронтенда (не нужен только для CLI или Docker) |
+| [npm](https://www.npmjs.com/) | 9+ | `npm --version` | обычно вместе с Node.js |
+
+Нужен как минимум один **API-ключ** LLM-провайдера (например [OpenAI](https://platform.openai.com/api-keys), [DeepSeek](https://platform.deepseek.com/), [Anthropic](https://console.anthropic.com/)). Тур поможет ввести его и проверить соединение.
+
 ### Вариант A — интерактивный тур (рекомендуется)
 
-**Один скрипт** — зависимости, окружение, проверка связи, запуск.
+**Один интерактивный скрипт** проведёт через установку зависимостей, настройку окружения, проверку соединения в реальном времени и запуск. Ручное редактирование `.env` почти не требуется.
 
 ```bash
 git clone https://github.com/HKUDS/DeepTutor.git
 cd DeepTutor
 
-conda create -n deeptutor python=3.11 && conda activate deeptutor
-# или: python -m venv .venv && source .venv/bin/activate
+# Виртуальное окружение Python (выберите одно):
+conda create -n deeptutor python=3.11 && conda activate deeptutor   # Anaconda / Miniconda
+python -m venv .venv && source .venv/bin/activate                    # иначе (macOS / Linux)
+python -m venv .venv && .venv\Scripts\activate                       # иначе (Windows)
 
 python scripts/start_tour.py
 ```
 
-- **Web** — профиль, pip + npm, временный сервер, **Настройки**, 4 шага (LLM, эмбеддинги, поиск).
-- **CLI** — всё в терминале.
+Тур спрашивает, как вы хотите использовать DeepTutor:
 
-[http://localhost:3782](http://localhost:3782)
+- **Режим Web** (рекомендуется) — ставит все зависимости (pip + npm), поднимает временный сервер и открывает **Настройки** в браузере; четыре шага для LLM, эмбеддингов и поиска с проверкой соединения; по завершении DeepTutor перезапускается с вашей конфигурацией.
+- **Режим CLI** — полностью интерактивный сценарий в терминале: профиль, установка, провайдеры, проверка и применение без выхода из shell.
+
+В обоих случаях вы получите DeepTutor на [http://localhost:3782](http://localhost:3782).
+
+> **Ежедневный запуск** — тур нужен только один раз. Дальше используйте:
+>
+> ```bash
+> python scripts/start_web.py
+> ```
+>
+> Запускает backend и frontend одной командой и открывает браузер. Запускайте `start_tour.py` снова только при смене провайдеров или переустановке зависимостей.
 
 <a id="option-b-manual"></a>
 ### Вариант B — ручная локальная установка
+
+Если нужен полный контроль, установите и настройте всё вручную.
+
+**1. Установка зависимостей**
 
 ```bash
 git clone https://github.com/HKUDS/DeepTutor.git
 cd DeepTutor
 
+# Создать и активировать окружение (как в варианте A)
 conda create -n deeptutor python=3.11 && conda activate deeptutor
+
+# DeepTutor с зависимостями backend + web-сервера
 pip install -e ".[server]"
 
+# Фронтенд (нужен Node.js 18+)
 cd web && npm install && cd ..
 ```
+
+**2. Настройка окружения**
 
 ```bash
 cp .env.example .env
 ```
 
+Отредактируйте `.env` и заполните как минимум обязательные поля:
+
 ```dotenv
+# LLM (обязательно)
 LLM_BINDING=openai
 LLM_MODEL=gpt-4o-mini
 LLM_API_KEY=sk-xxx
 LLM_HOST=https://api.openai.com/v1
 
+# Эмбеддинги (обязательно для базы знаний)
 EMBEDDING_BINDING=openai
 EMBEDDING_MODEL=text-embedding-3-large
 EMBEDDING_API_KEY=sk-xxx
@@ -137,6 +194,8 @@ EMBEDDING_DIMENSION=3072
 | Gemini | `gemini` | `https://generativelanguage.googleapis.com/v1beta/openai/` |
 | GitHub Copilot | `github_copilot` | `https://api.githubcopilot.com` |
 | Groq | `groq` | `https://api.groq.com/openai/v1` |
+| llama.cpp | `llama_cpp` | `http://localhost:8080/v1` |
+| LM Studio | `lm_studio` | `http://localhost:1234/v1` |
 | MiniMax | `minimax` | `https://api.minimax.io/v1` |
 | Mistral | `mistral` | `https://api.mistral.ai/v1` |
 | Moonshot (Kimi) | `moonshot` | `https://api.moonshot.ai/v1` |
@@ -159,16 +218,17 @@ EMBEDDING_DIMENSION=3072
 <details>
 <summary><b>Поддерживаемые провайдеры эмбеддингов</b></summary>
 
-Эмбеддинги используют тот же список, что и LLM. Частые примеры:
+| Провайдер | Binding | Пример модели | Размерность по умолчанию |
+|:--|:--|:--|:--|
+| OpenAI | `openai` | `text-embedding-3-large` | 3072 |
+| Azure OpenAI | `azure_openai` | имя развёртывания | — |
+| Cohere | `cohere` | `embed-v4.0` | 1024 |
+| Jina | `jina` | `jina-embeddings-v3` | 1024 |
+| Ollama | `ollama` | `nomic-embed-text` | 768 |
+| vLLM / LM Studio | `vllm` | Любая embedding-модель | — |
+| OpenAI-совместимый | `custom` | — | — |
 
-| Провайдер | Binding | Пример модели |
-|:--|:--|:--|
-| OpenAI | `openai` | `text-embedding-3-large` |
-| DashScope | `dashscope` | `text-embedding-v3` |
-| Ollama | `ollama` | `nomic-embed-text` |
-| SiliconFlow | `siliconflow` | `BAAI/bge-m3` |
-| vLLM | `vllm` | Любая embedding-модель |
-| OpenAI-совместимый | `custom` | — |
+OpenAI-совместимые провайдеры (DashScope, SiliconFlow и др.) работают через binding `custom` или `openai`.
 
 </details>
 
@@ -186,17 +246,38 @@ EMBEDDING_DIMENSION=3072
 
 </details>
 
+**3. Запуск сервисов**
+
+Самый быстрый способ:
+
 ```bash
+python scripts/start_web.py
+```
+
+Запускает backend и frontend и открывает браузер.
+
+Или запускайте вручную в отдельных терминалах:
+
+```bash
+# Backend (FastAPI)
 python -m deeptutor.api.run_server
+
+# Frontend (Next.js) — другой терминал
 cd web && npm run dev -- -p 3782
 ```
 
-| Сервис | Порт |
+| Сервис | Порт по умолчанию |
 |:---:|:---:|
 | Backend | `8001` |
 | Frontend | `3782` |
 
+Откройте [http://localhost:3782](http://localhost:3782).
+
 ### Вариант C — Docker
+
+Docker упаковывает backend и frontend в один контейнер; локальные Python и Node.js не нужны. Достаточно [Docker Desktop](https://www.docker.com/products/docker-desktop/) (или Docker Engine + Compose на Linux).
+
+**1. Переменные окружения** (нужны для обоих вариантов ниже)
 
 ```bash
 git clone https://github.com/HKUDS/DeepTutor.git
@@ -204,47 +285,80 @@ cd DeepTutor
 cp .env.example .env
 ```
 
-Как в [варианте B](#option-b-manual).
+Заполните `.env` как минимум обязательные поля (как в [варианте B](#option-b-manual)).
 
-**2a. Официальный образ** — [GHCR](https://github.com/HKUDS/DeepTutor/pkgs/container/deeptutor)
+**2a. Официальный образ (рекомендуется)**
+
+Официальные образы публикуются в [GitHub Container Registry](https://github.com/HKUDS/DeepTutor/pkgs/container/deeptutor) для `linux/amd64` и `linux/arm64`.
 
 ```bash
 docker compose -f docker-compose.ghcr.yml up -d
 ```
 
-**2b. Сборка** — `docker compose up -d`
+Чтобы зафиксировать версию, измените тег образа в `docker-compose.ghcr.yml`:
 
-**3.** [http://localhost:3782](http://localhost:3782)
+```yaml
+image: ghcr.io/hkuds/deeptutor:1.0.0  # или :latest
+```
+
+**2b. Сборка из исходников**
 
 ```bash
-docker compose logs -f
-docker compose down
+docker compose up -d
+```
+
+Собирает образ из `Dockerfile` локально и запускает контейнер.
+
+**3. Проверка и управление**
+
+Откройте [http://localhost:3782](http://localhost:3782), когда контейнер станет healthy.
+
+```bash
+docker compose logs -f   # логи
+docker compose down       # остановить и удалить контейнер
 ```
 
 <details>
 <summary><b>Облако / удалённый сервер</b></summary>
 
+На удалённом сервере браузеру нужен публичный URL backend API. Добавьте в `.env`:
+
 ```dotenv
+# Публичный URL, по которому доступен backend
 NEXT_PUBLIC_API_BASE_EXTERNAL=https://your-server.com:8001
 ```
+
+Скрипт запуска фронтенда подставляет значение во время выполнения — пересборка не нужна.
 
 </details>
 
 <details>
 <summary><b>Режим разработки (hot-reload)</b></summary>
 
+Подключите dev-override, чтобы смонтировать исходники и включить hot-reload для обоих сервисов:
+
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 ```
+
+Изменения в `deeptutor/`, `deeptutor_cli/`, `scripts/` и `web/` применяются сразу.
 
 </details>
 
 <details>
 <summary><b>Свои порты</b></summary>
 
+Переопределите порты в `.env`:
+
 ```dotenv
 BACKEND_PORT=9001
 FRONTEND_PORT=4000
+```
+
+Затем перезапустите:
+
+```bash
+docker compose up -d     # или docker compose -f docker-compose.ghcr.yml up -d
 ```
 
 </details>
@@ -252,40 +366,57 @@ FRONTEND_PORT=4000
 <details>
 <summary><b>Персистентность данных</b></summary>
 
-| Контейнер | Хост | Содержимое |
+Данные пользователя и базы знаний сохраняются через Docker-тома в локальные каталоги:
+
+| Путь в контейнере | Путь на хосте | Содержимое |
 |:---|:---|:---|
 | `/app/data/user` | `./data/user` | Настройки, память, workspace, сессии, логи |
-| `/app/data/knowledge_bases` | `./data/knowledge_bases` | Документы и векторы |
+| `/app/data/knowledge_bases` | `./data/knowledge_bases` | Загруженные документы и векторные индексы |
+
+Каталоги сохраняются после `docker compose down` и используются снова при следующем `up`.
 
 </details>
 
 <details>
-<summary><b>Переменные окружения</b></summary>
+<summary><b>Справочник переменных окружения</b></summary>
 
 | Переменная | Обяз. | Описание |
 |:---|:---:|:---|
-| `LLM_BINDING` | **Да** | Провайдер LLM |
-| `LLM_MODEL` | **Да** | Модель |
-| `LLM_API_KEY` | **Да** | Ключ |
-| `LLM_HOST` | **Да** | URL |
-| `EMBEDDING_BINDING` | **Да** | Эмбеддинги |
-| `EMBEDDING_MODEL` | **Да** | Модель |
-| `EMBEDDING_API_KEY` | **Да** | Ключ |
-| `EMBEDDING_HOST` | **Да** | URL |
-| `EMBEDDING_DIMENSION` | **Да** | Размерность |
-| `SEARCH_PROVIDER` | Нет | Поиск |
-| `SEARCH_API_KEY` | Нет | Ключ |
-| `BACKEND_PORT` | Нет | по умолч. `8001` |
-| `FRONTEND_PORT` | Нет | по умолч. `3782` |
-| `NEXT_PUBLIC_API_BASE_EXTERNAL` | Нет | Публичный URL |
-| `DISABLE_SSL_VERIFY` | Нет | по умолч. `false` |
+| `LLM_BINDING` | **Да** | Провайдер LLM (`openai`, `anthropic`, …) |
+| `LLM_MODEL` | **Да** | Имя модели (напр. `gpt-4o`) |
+| `LLM_API_KEY` | **Да** | API-ключ LLM |
+| `LLM_HOST` | **Да** | URL эндпоинта |
+| `EMBEDDING_BINDING` | **Да** | Провайдер эмбеддингов |
+| `EMBEDDING_MODEL` | **Да** | Имя модели эмбеддингов |
+| `EMBEDDING_API_KEY` | **Да** | Ключ API эмбеддингов |
+| `EMBEDDING_HOST` | **Да** | Эндпоинт эмбеддингов |
+| `EMBEDDING_DIMENSION` | **Да** | Размерность вектора |
+| `SEARCH_PROVIDER` | Нет | Поиск (`tavily`, `jina`, `serper`, `perplexity`, …) |
+| `SEARCH_API_KEY` | Нет | Ключ поиска |
+| `BACKEND_PORT` | Нет | Порт backend (по умолч. `8001`) |
+| `FRONTEND_PORT` | Нет | Порт frontend (по умолч. `3782`) |
+| `NEXT_PUBLIC_API_BASE_EXTERNAL` | Нет | Публичный URL backend для облака |
+| `DISABLE_SSL_VERIFY` | Нет | Отключить проверку SSL (по умолч. `false`) |
 
 </details>
 
 ### Вариант D — только CLI
 
+Если нужен только CLI без веб-интерфейса:
+
 ```bash
 pip install -e ".[cli]"
+```
+
+Провайдер LLM всё равно нужно настроить. Быстрый путь:
+
+```bash
+cp .env.example .env   # затем отредактируйте .env и укажите ключи
+```
+
+После настройки:
+
+```bash
 deeptutor chat
 deeptutor run chat "Explain Fourier transform"
 deeptutor run deep_solve "Solve x^2 = 4"
@@ -503,8 +634,10 @@ deeptutor session open <id>
 
 | Статус | Этап |
 |:---:|:---|
-| 🔜 | **Аутентификация и вход** — опциональная страница входа для публичных развёртываний и мультипользовательский режим |
-| 🔜 | **Темы и оформление** — разнообразные темы и настройка интерфейса |
+| 🎯 | **Аутентификация и вход** — опциональная страница входа для публичных развёртываний и мультипользовательский режим |
+| 🎯 | **Темы и оформление** — разнообразные темы и настройка интерфейса |
+| 🎯 | **Улучшение интерфейса** — доработка иконок и деталей взаимодействия |
+| 🔜 | **Улучшенная память** — более мощное управление памятью |
 | 🔜 | **Интеграция LightRAG** — подключение [LightRAG](https://github.com/HKUDS/LightRAG) как продвинутого движка баз знаний |
 | 🔜 | **Сайт документации** — полная документация: руководства, справочник API и учебные материалы |
 
@@ -549,6 +682,16 @@ deeptutor session open <id>
   </picture>
 </a>
 </div>
+
+<p align="center">
+ <a href="https://www.star-history.com/hkuds/deeptutor">
+  <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/badge?repo=HKUDS/DeepTutor&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/badge?repo=HKUDS/DeepTutor" />
+   <img alt="Star History Rank" src="https://api.star-history.com/badge?repo=HKUDS/DeepTutor" />
+  </picture>
+ </a>
+</p>
 
 <div align="center">
 

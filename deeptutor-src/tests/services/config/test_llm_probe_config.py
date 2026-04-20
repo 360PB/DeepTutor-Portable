@@ -10,6 +10,7 @@ from unittest.mock import AsyncMock, patch
 import pytest
 import yaml
 
+from deeptutor.services.config import loader as loader_module
 from deeptutor.services.config.loader import get_agent_params
 
 
@@ -33,9 +34,7 @@ class TestGetAgentParamsLlmProbe:
         project_root = _write_agents_yaml(tmp_path, {
             "diagnostics": {"llm_probe": {"max_tokens": 2048}},
         })
-        monkeypatch.setattr(
-            "deeptutor.services.config.loader.PROJECT_ROOT", project_root,
-        )
+        monkeypatch.setattr(loader_module, "PROJECT_ROOT", project_root)
         params = get_agent_params("llm_probe")
         assert params["max_tokens"] == 2048
 
@@ -43,9 +42,7 @@ class TestGetAgentParamsLlmProbe:
         project_root = _write_agents_yaml(tmp_path, {
             "capabilities": {"solve": {"temperature": 0.3}},
         })
-        monkeypatch.setattr(
-            "deeptutor.services.config.loader.PROJECT_ROOT", project_root,
-        )
+        monkeypatch.setattr(loader_module, "PROJECT_ROOT", project_root)
         params = get_agent_params("llm_probe")
         assert params["max_tokens"] == 4096
         assert params["temperature"] == 0.5
@@ -54,9 +51,7 @@ class TestGetAgentParamsLlmProbe:
         project_root = _write_agents_yaml(tmp_path, {
             "diagnostics": {"llm_probe": {"temperature": 0.1}},
         })
-        monkeypatch.setattr(
-            "deeptutor.services.config.loader.PROJECT_ROOT", project_root,
-        )
+        monkeypatch.setattr(loader_module, "PROJECT_ROOT", project_root)
         params = get_agent_params("llm_probe")
         assert params["max_tokens"] == 4096
         assert params["temperature"] == 0.1
@@ -65,9 +60,7 @@ class TestGetAgentParamsLlmProbe:
         project_root = _write_agents_yaml(tmp_path, {
             "diagnostics": {"llm_probe": {"max_tokens": 512, "temperature": 0.2}},
         })
-        monkeypatch.setattr(
-            "deeptutor.services.config.loader.PROJECT_ROOT", project_root,
-        )
+        monkeypatch.setattr(loader_module, "PROJECT_ROOT", project_root)
         params = get_agent_params("llm_probe")
         assert params["max_tokens"] == 512
         assert params["temperature"] == 0.2
@@ -84,9 +77,7 @@ def _patch_project_root(tmp_path: Path, monkeypatch):
     project_root = _write_agents_yaml(tmp_path, {
         "diagnostics": {"llm_probe": {"max_tokens": 768}},
     })
-    monkeypatch.setattr(
-        "deeptutor.services.config.loader.PROJECT_ROOT", project_root,
-    )
+    monkeypatch.setattr(loader_module, "PROJECT_ROOT", project_root)
     return project_root
 
 
@@ -96,7 +87,9 @@ class TestLlmProbeUsesAgentsYaml:
     @pytest.mark.asyncio
     @pytest.mark.usefixtures("_patch_project_root")
     async def test_probe_passes_configured_max_tokens(self, monkeypatch):
+        from deeptutor.services.config import test_runner as test_runner_module
         from deeptutor.services.config.test_runner import ConfigTestRunner, TestRun
+        from deeptutor.services import llm as llm_module
 
         captured_kwargs: dict[str, Any] = {}
 
@@ -105,19 +98,12 @@ class TestLlmProbeUsesAgentsYaml:
             return "OK I am gpt-4o-mini"
 
         monkeypatch.setattr(
-            "deeptutor.services.config.test_runner.resolve_llm_runtime_config",
+            test_runner_module, "resolve_llm_runtime_config",
             lambda catalog: _stub_resolved_llm(),
         )
-        monkeypatch.setattr(
-            "deeptutor.services.llm.get_token_limit_kwargs",
-            _real_get_token_limit_kwargs,
-        )
-        monkeypatch.setattr(
-            "deeptutor.services.llm.complete", _fake_llm_complete,
-        )
-        monkeypatch.setattr(
-            "deeptutor.services.llm.clear_llm_config_cache", lambda: None,
-        )
+        monkeypatch.setattr(llm_module, "get_token_limit_kwargs", _real_get_token_limit_kwargs)
+        monkeypatch.setattr(llm_module, "complete", _fake_llm_complete)
+        monkeypatch.setattr(llm_module, "clear_llm_config_cache", lambda: None)
 
         runner = ConfigTestRunner()
         run = TestRun(id="test-llm-probe", service="llm")
@@ -129,11 +115,11 @@ class TestLlmProbeUsesAgentsYaml:
     async def test_probe_defaults_when_no_diagnostics_section(self, tmp_path, monkeypatch):
         """When diagnostics section is absent, falls back to get_agent_params default (4096)."""
         project_root = _write_agents_yaml(tmp_path, {"capabilities": {}})
-        monkeypatch.setattr(
-            "deeptutor.services.config.loader.PROJECT_ROOT", project_root,
-        )
+        monkeypatch.setattr(loader_module, "PROJECT_ROOT", project_root)
 
+        from deeptutor.services.config import test_runner as test_runner_module
         from deeptutor.services.config.test_runner import ConfigTestRunner, TestRun
+        from deeptutor.services import llm as llm_module
 
         captured_kwargs: dict[str, Any] = {}
 
@@ -142,19 +128,12 @@ class TestLlmProbeUsesAgentsYaml:
             return "OK I am gpt-4o-mini"
 
         monkeypatch.setattr(
-            "deeptutor.services.config.test_runner.resolve_llm_runtime_config",
+            test_runner_module, "resolve_llm_runtime_config",
             lambda catalog: _stub_resolved_llm(),
         )
-        monkeypatch.setattr(
-            "deeptutor.services.llm.get_token_limit_kwargs",
-            _real_get_token_limit_kwargs,
-        )
-        monkeypatch.setattr(
-            "deeptutor.services.llm.complete", _fake_llm_complete,
-        )
-        monkeypatch.setattr(
-            "deeptutor.services.llm.clear_llm_config_cache", lambda: None,
-        )
+        monkeypatch.setattr(llm_module, "get_token_limit_kwargs", _real_get_token_limit_kwargs)
+        monkeypatch.setattr(llm_module, "complete", _fake_llm_complete)
+        monkeypatch.setattr(llm_module, "clear_llm_config_cache", lambda: None)
 
         runner = ConfigTestRunner()
         run = TestRun(id="test-llm-probe-default", service="llm")

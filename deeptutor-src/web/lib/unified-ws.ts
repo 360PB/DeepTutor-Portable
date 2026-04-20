@@ -64,6 +64,7 @@ export interface StartTurnMessage {
     record_ids: string[];
   }[];
   history_references?: string[];
+  question_notebook_references?: number[];
 }
 
 export interface SubscribeTurnMessage {

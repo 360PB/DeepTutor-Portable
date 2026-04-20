@@ -26,6 +26,8 @@
 
 ### 📦 Releases
 
+> **[2026.4.20]** [v1.2.0](https://github.com/HKUDS/DeepTutor/releases/tag/v1.2.0) — Book Engine multi-agent "living book" compiler with 14 block types, multi-document Co-Writer workspace, interactive HTML visualizations, Question Bank @-mention in chat, prompt externalization phase 2, and sidebar overhaul.
+
 > **[2026.4.18]** [v1.1.2](https://github.com/HKUDS/DeepTutor/releases/tag/v1.1.2) — Schema-driven Channels tab with secret masking, RAG collapsed to single pipeline, RAG/KB consistency hardening, externalized chat prompts, and Thai README.
 
 > **[2026.4.17]** [v1.1.1](https://github.com/HKUDS/DeepTutor/releases/tag/v1.1.1) — Universal "Answer now" across all capabilities, Co-Writer scroll sync, Save-to-Notebook message selection, unified settings panel, streaming Stop button, and TutorBot atomic config writes.
@@ -90,6 +92,19 @@
 
 ## 🚀 Get Started
 
+### Prerequisites
+
+Before you begin, make sure the following are installed on your system:
+
+| Requirement | Version | Check | Notes |
+|:---|:---|:---|:---|
+| [Git](https://git-scm.com/) | Any | `git --version` | For cloning the repository |
+| [Python](https://www.python.org/downloads/) | 3.11+ | `python --version` | Backend runtime |
+| [Node.js](https://nodejs.org/) | 18+ | `node --version` | Frontend build (not needed for CLI-only or Docker) |
+| [npm](https://www.npmjs.com/) | 9+ | `npm --version` | Bundled with Node.js |
+
+You'll also need an **API key** from at least one LLM provider (e.g. [OpenAI](https://platform.openai.com/api-keys), [DeepSeek](https://platform.deepseek.com/), [Anthropic](https://console.anthropic.com/)). The Setup Tour will walk you through entering it.
+
 ### Option A — Setup Tour (Recommended)
 
 A **single interactive script** that walks you through everything: dependency installation, environment configuration, live connection testing, and launch. No manual `.env` editing needed.
@@ -98,9 +113,10 @@ A **single interactive script** that walks you through everything: dependency in
 git clone https://github.com/HKUDS/DeepTutor.git
 cd DeepTutor
 
-# Create a Python environment
-conda create -n deeptutor python=3.11 && conda activate deeptutor
-# Or: python -m venv .venv && source .venv/bin/activate
+# Create a Python virtual environment (pick one):
+conda create -n deeptutor python=3.11 && conda activate deeptutor   # if you use Anaconda/Miniconda
+python -m venv .venv && source .venv/bin/activate                    # otherwise (macOS/Linux)
+python -m venv .venv && .venv\Scripts\activate                       # otherwise (Windows)
 
 # Launch the guided tour
 python scripts/start_tour.py
@@ -108,10 +124,18 @@ python scripts/start_tour.py
 
 The tour asks how you'd like to use DeepTutor:
 
-- **Web mode** (recommended) — Picks a dependency profile, installs everything (pip + npm), then spins up a temporary server and opens the **Settings** page in your browser. A four-step guided tour walks you through LLM, Embedding, and Search provider setup with live connection testing. Once complete, DeepTutor restarts automatically with your configuration.
+- **Web mode** (recommended) — Installs all dependencies (pip + npm), spins up a temporary server, and opens the **Settings** page in your browser. A four-step guided tour walks you through LLM, Embedding, and Search provider setup with live connection testing. Once complete, DeepTutor restarts automatically with your configuration.
 - **CLI mode** — A fully interactive terminal flow: choose a dependency profile, install dependencies, configure providers, verify connections, and apply — all without leaving the shell.
 
 Either way, you end up with a running DeepTutor at [http://localhost:3782](http://localhost:3782).
+
+> **Daily launch** — The tour is only needed once. From now on, start DeepTutor with:
+>
+> ```bash
+> python scripts/start_web.py
+> ```
+>
+> This boots both the backend and frontend in one command and opens the browser automatically. Re-run `start_tour.py` only if you need to reconfigure providers or reinstall dependencies.
 
 ### Option B — Manual Local Install
 
@@ -123,10 +147,13 @@ If you prefer full control, install and configure everything yourself.
 git clone https://github.com/HKUDS/DeepTutor.git
 cd DeepTutor
 
+# Create & activate a Python virtual environment (same as Option A)
 conda create -n deeptutor python=3.11 && conda activate deeptutor
+
+# Install DeepTutor with backend + web server dependencies
 pip install -e ".[server]"
 
-# Frontend
+# Install frontend dependencies (requires Node.js 18+)
 cd web && npm install && cd ..
 ```
 
@@ -223,6 +250,16 @@ OpenAI-compatible providers (DashScope, SiliconFlow, etc.) work via the `custom`
 
 **3. Start services**
 
+The quickest way to launch everything:
+
+```bash
+python scripts/start_web.py
+```
+
+This starts both the backend and frontend and opens the browser automatically.
+
+Alternatively, start each service manually in separate terminals:
+
 ```bash
 # Backend (FastAPI)
 python -m deeptutor.api.run_server
@@ -240,9 +277,9 @@ Open [http://localhost:3782](http://localhost:3782) and you're ready to go.
 
 ### Option C — Docker Deployment
 
-Docker wraps the backend and frontend into a single container — no local Python or Node.js required. Two options depending on your preference:
+Docker wraps the backend and frontend into a single container — no local Python or Node.js required. You only need [Docker Desktop](https://www.docker.com/products/docker-desktop/) (or Docker Engine + Compose on Linux).
 
-**1. Configure environment variables** (required for both options)
+**1. Configure environment variables** (required for both options below)
 
 ```bash
 git clone https://github.com/HKUDS/DeepTutor.git
@@ -371,6 +408,17 @@ If you just want the CLI without the web frontend:
 
 ```bash
 pip install -e ".[cli]"
+```
+
+You still need to configure your LLM provider. The quickest way:
+
+```bash
+cp .env.example .env   # then edit .env to fill in your API keys
+```
+
+Once configured, you're ready to go:
+
+```bash
 deeptutor chat                                   # Interactive REPL
 deeptutor run chat "Explain Fourier transform"   # One-shot capability
 deeptutor run deep_solve "Solve x^2 = 4"         # Multi-agent problem solving

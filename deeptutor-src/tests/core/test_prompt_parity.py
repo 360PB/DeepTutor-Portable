@@ -7,7 +7,12 @@ from typing import Any, Iterable
 import yaml
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-AGENTS_DIR = PROJECT_ROOT / "src" / "agents"
+AGENTS_DIR = PROJECT_ROOT / "deeptutor" / "agents"
+# Modules that live outside deeptutor/agents/ but still own prompts.
+EXTRA_PROMPT_MODULE_DIRS = (
+    PROJECT_ROOT / "deeptutor" / "book",
+    PROJECT_ROOT / "deeptutor" / "co_writer",
+)
 
 # Template placeholders are expected to be like {topic}, {knowledge_title}, etc.
 # Avoid false positives from LaTeX (\frac{1}{3}) and Mermaid (B{{Processing}}).
@@ -59,7 +64,12 @@ def test_prompts_key_and_placeholder_parity():
 
     failures: list[str] = []
 
-    for module_dir in sorted([p for p in AGENTS_DIR.iterdir() if p.is_dir()]):
+    module_dirs: list[Path] = sorted(
+        [p for p in AGENTS_DIR.iterdir() if p.is_dir() and not p.name.startswith("__")]
+    )
+    module_dirs.extend(p for p in EXTRA_PROMPT_MODULE_DIRS if p.is_dir())
+
+    for module_dir in module_dirs:
         prompts_dir = module_dir / "prompts"
         en_dir = prompts_dir / "en"
         if not en_dir.exists():

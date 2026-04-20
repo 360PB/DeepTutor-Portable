@@ -2,6 +2,8 @@
 
 DeepTutor 离线整合包，无需安装 Python/Node.js，解压即用。
 
+> **当前同步版本**: [DeepTutor v1.2.0](https://github.com/HKUDS/DeepTutor/releases/tag/v1.2.0) (2026.04.20)
+
 | 资源 | 链接 |
 |------|------|
 | 下载 (夸克网盘) | https://pan.quark.cn/s/b0ae07ff3fdb |
@@ -54,12 +56,13 @@ DeepTutor-Portable/
 
 ## 支持的功能
 
-- 统一聊天工作区（Chat / Deep Solve / Quiz / Deep Research / Math Animator）
-- AI Co-Writer
-- Guided Learning
+- 统一聊天工作区（Chat / Deep Solve / Quiz / Deep Research / Math Animator / Visualize）
+- **Book Engine** — 多智能体「活书」编译器（v1.2.0 新增）
+- AI Co-Writer — 多文档工作区
 - Knowledge Hub（RAG 知识库）
 - TutorBot 多平台频道
 - 持久化记忆
+- Question Bank @-Mention
 
 ## 配置说明
 

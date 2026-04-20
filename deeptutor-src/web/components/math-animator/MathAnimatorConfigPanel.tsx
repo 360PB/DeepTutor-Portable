@@ -33,11 +33,11 @@ export default function MathAnimatorConfigPanel({
   return (
     <CollapsibleConfigSection
       collapsed={collapsed}
-      summary={summarizeMathAnimatorConfig(value)}
+      summary={summarizeMathAnimatorConfig(value, t)}
       onToggleCollapsed={onToggleCollapsed}
       bodyClassName="flex flex-wrap items-end gap-x-3 gap-y-2 px-3.5 pb-2.5"
     >
-      <Field label="Output" width="w-[100px]">
+      <Field label={t("Output")} width="w-[100px]">
         <select
           value={value.output_mode}
           onChange={(e) => update("output_mode", e.target.value as MathAnimatorFormConfig["output_mode"])}
@@ -48,7 +48,7 @@ export default function MathAnimatorConfigPanel({
         </select>
       </Field>
 
-      <Field label="Quality" width="w-[100px]">
+      <Field label={t("Quality")} width="w-[100px]">
         <select
           value={value.quality}
           onChange={(e) => update("quality", e.target.value as MathAnimatorFormConfig["quality"])}
@@ -60,7 +60,7 @@ export default function MathAnimatorConfigPanel({
         </select>
       </Field>
 
-      <Field label="Style Hint" width="min-w-[160px] flex-1">
+      <Field label={t("Style Hint")} width="min-w-[160px] flex-1">
         <input
           type="text"
           value={value.style_hint}

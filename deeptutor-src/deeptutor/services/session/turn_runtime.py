@@ -36,6 +36,74 @@ def _clip_text(value: str, limit: int = 4000) -> str:
     return text[:limit].rstrip() + "\n...[truncated]"
 
 
+def _format_question_bank_entry(entry: dict[str, Any]) -> str:
+    """Render a single Question Bank entry as a structured Markdown block."""
+    lines: list[str] = []
+    title = str(entry.get("session_title", "") or "Untitled session")
+    difficulty = str(entry.get("difficulty", "") or "").strip()
+    qtype = str(entry.get("question_type", "") or "").strip()
+    is_correct = bool(entry.get("is_correct"))
+
+    badges: list[str] = []
+    if qtype:
+        badges.append(qtype)
+    if difficulty:
+        badges.append(difficulty)
+    badges.append("correct" if is_correct else "incorrect")
+    badge_text = " · ".join(badges)
+
+    lines.append(f"### Question (from {title}) [{badge_text}]")
+    lines.append(_clip_text(str(entry.get("question", "") or ""), limit=2000))
+
+    options = entry.get("options") or {}
+    if isinstance(options, dict) and options:
+        lines.append("")
+        lines.append("**Options:**")
+        for key in sorted(options.keys()):
+            lines.append(f"- {key}. {options[key]}")
+
+    user_answer = str(entry.get("user_answer", "") or "").strip()
+    correct_answer = str(entry.get("correct_answer", "") or "").strip()
+    if user_answer:
+        lines.append("")
+        lines.append(f"**User's Answer:** {_clip_text(user_answer, limit=1000)}")
+    if correct_answer:
+        lines.append(f"**Reference Answer:** {_clip_text(correct_answer, limit=1500)}")
+
+    explanation = str(entry.get("explanation", "") or "").strip()
+    if explanation:
+        lines.append("")
+        lines.append("**Explanation:**")
+        lines.append(_clip_text(explanation, limit=2000))
+
+    return "\n".join(lines)
+
+
+async def _build_question_bank_context(
+    store: SQLiteSessionStore,
+    entry_ids: list[Any],
+) -> str:
+    """Fetch the requested Question Bank entries and render them as context."""
+    seen: set[int] = set()
+    blocks: list[str] = []
+    for raw in entry_ids:
+        try:
+            entry_id = int(raw)
+        except (TypeError, ValueError):
+            continue
+        if entry_id in seen:
+            continue
+        seen.add(entry_id)
+        try:
+            entry = await store.get_notebook_entry(entry_id)
+        except Exception:
+            entry = None
+        if not entry:
+            continue
+        blocks.append(_format_question_bank_entry(entry))
+    return "\n\n---\n\n".join(blocks)
+
+
 def _extract_followup_question_context(
     config: dict[str, Any] | None,
 ) -> dict[str, Any] | None:
@@ -355,8 +423,12 @@ class TurnRuntimeManager:
             raw_user_content = str(payload.get("content", "") or "")
             notebook_references = payload.get("notebook_references", []) or []
             history_references = payload.get("history_references", []) or []
+            question_notebook_references = (
+                payload.get("question_notebook_references", []) or []
+            )
             notebook_context = ""
             history_context = ""
+            question_bank_context = ""
 
             for item in payload.get("attachments", []):
                 record = {
@@ -480,12 +552,21 @@ class TurnRuntimeManager:
                             total += len(part)
                         history_context = "\n\n".join(parts)
 
+            if question_notebook_references:
+                question_bank_context = await _build_question_bank_context(
+                    self.store, question_notebook_references
+                )
+
             effective_user_message = raw_user_content
             context_parts: list[str] = []
             if notebook_context:
                 context_parts.append(f"[Notebook Context]\n{notebook_context}")
             if history_context:
                 context_parts.append(f"[History Context]\n{history_context}")
+            if question_bank_context:
+                context_parts.append(
+                    f"[Question Bank Context]\n{question_bank_context}"
+                )
             if context_parts:
                 context_parts.append(f"[User Question]\n{raw_user_content}")
                 effective_user_message = "\n\n".join(context_parts)
@@ -524,6 +605,8 @@ class TurnRuntimeManager:
                     "question_followup_context": followup_question_context or {},
                     "notebook_references": notebook_references,
                     "history_references": history_references,
+                    "question_notebook_references": question_notebook_references,
+                    "question_bank_context": question_bank_context,
                     "memory_context": memory_context,
                 },
             )

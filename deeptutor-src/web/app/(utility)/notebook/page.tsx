@@ -177,7 +177,7 @@ export default function NotebookPage() {
         <div className="mb-6 flex items-start justify-between">
           <div>
             <h1 className="text-[24px] font-semibold tracking-tight text-[var(--foreground)]">
-              {t("Question Notebook")}
+              {t("Question Bank")}
             </h1>
             <p className="mt-1 text-[13px] text-[var(--muted-foreground)]">
               {t("Review and organize quiz questions across sessions.")}

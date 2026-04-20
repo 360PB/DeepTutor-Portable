@@ -11,14 +11,14 @@ def test_add_record_accepts_enum_record_type(tmp_path) -> None:
 
     result = manager.add_record(
         notebook_ids=[notebook["id"]],
-        record_type=RecordType.CO_WRITER,
+        record_type=RecordType.CHAT,
         title="Sample",
         user_query="Sample",
         output="# Sample",
     )
 
-    assert result["record"]["type"] == RecordType.CO_WRITER
+    assert result["record"]["type"] == RecordType.CHAT
 
     stored = manager.get_notebook(notebook["id"])
     assert stored is not None
-    assert stored["records"][0]["type"] == "co_writer"
+    assert stored["records"][0]["type"] == "chat"

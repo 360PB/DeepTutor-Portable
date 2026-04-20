@@ -11,7 +11,7 @@ Usage:
     pm = get_prompt_manager()
 
     # Load prompts for an agent
-    prompts = pm.load_prompts("guide", "tutor_agent", language="en")
+    prompts = pm.load_prompts("solve", "solve_agent", language="en")
 
     # Get specific prompt
     system_prompt = pm.get_prompt(prompts, "system", "base")

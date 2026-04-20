@@ -10,6 +10,7 @@ from deeptutor.core.trace import build_trace_metadata, derive_trace_metadata, ne
 from deeptutor.services.llm import clean_thinking_tags, get_llm_config, get_token_limit_kwargs
 from deeptutor.services.llm import complete as llm_complete, stream as llm_stream
 from deeptutor.services.llm import stream as llm_stream
+from deeptutor.services.prompt.manager import get_prompt_manager
 from deeptutor.utils.json_parser import parse_json_response
 
 logger = logging.getLogger(__name__)
@@ -35,6 +36,12 @@ class NotebookAnalysisAgent:
         self.base_url = getattr(self.llm_config, "base_url", None)
         self.api_version = getattr(self.llm_config, "api_version", None)
         self.binding = getattr(self.llm_config, "binding", None) or "openai"
+        # Prompts come from deeptutor/agents/notebook/prompts/{en,zh}/analysis_agent.yaml
+        # so the three-stage notebook reasoning loop stays bilingual without
+        # carrying language-specific text in this file.
+        self._prompts = get_prompt_manager().load_prompts(
+            "notebook", "analysis_agent", self.language
+        )
 
     async def analyze(
         self,
@@ -277,58 +284,27 @@ class NotebookAnalysisAgent:
             )
         )
 
+    def _stage_section(self, stage: str) -> dict[str, Any]:
+        section = self._prompts.get(stage)
+        return section if isinstance(section, dict) else {}
+
+    def _stage_text(self, stage: str, field: str) -> str:
+        section = self._stage_section(stage)
+        return str(section.get(field, "")).strip()
+
     def _thinking_system_prompt(self) -> str:
-        if self.language == "zh":
-            return (
-                "你是 DeepTutor 的 notebook thinking 阶段。"
-                "你会先阅读用户问题与 notebook 摘要列表，判断要从哪些历史记录中提取细节。"
-                "输出内部思考，不要直接回答用户。"
-            )
-        return (
-            "You are DeepTutor's notebook thinking stage. "
-            "Review the user question and notebook summaries, then reason about which saved records matter most. "
-            "Output internal reasoning only, not the final answer."
-        )
+        return self._stage_text("thinking", "system")
 
     def _acting_system_prompt(self) -> str:
-        if self.language == "zh":
-            return (
-                "你是 DeepTutor 的 notebook acting 阶段。"
-                "你必须只输出 JSON：{\"selected_record_ids\": [最多5个id]}。"
-                "优先选择最能支撑当前问题的记录，避免冗余。"
-            )
-        return (
-            "You are DeepTutor's notebook acting stage. "
-            'Output JSON only: {"selected_record_ids": [up to 5 ids]}. '
-            "Choose the records most useful for the current question."
-        )
+        return self._stage_text("acting", "system")
 
     def _observing_system_prompt(self) -> str:
-        if self.language == "zh":
-            return (
-                "你是 DeepTutor 的 notebook observing 阶段。"
-                "请基于用户问题、thinking、以及选中历史记录的细节，产出一份供后续主能力使用的上下文总结。"
-                "总结必须结构化、紧凑，并区分已知事实、可复用内容、仍需谨慎的点。"
-                "不要用第一人称描述内部流程。"
-            )
-        return (
-            "You are DeepTutor's notebook observing stage. "
-            "Synthesize the user question, the prior reasoning, and the selected record details into a compact context note "
-            "for the main capability. Distinguish confirmed facts, reusable material, and uncertainties."
-        )
+        return self._stage_text("observing", "system")
 
     def _thinking_prompt(self, user_question: str, records: list[dict[str, Any]]) -> str:
-        catalog = self._summary_catalog(records)
-        if self.language == "zh":
-            return (
-                f"用户问题：\n{user_question.strip() or '(empty)'}\n\n"
-                f"可用 notebook 摘要：\n{catalog}\n\n"
-                "请思考：当前问题最需要哪些历史信息？哪些记录可能只需要摘要，哪些必须查看原文细节？"
-            )
-        return (
-            f"User question:\n{user_question.strip() or '(empty)'}\n\n"
-            f"Available notebook summaries:\n{catalog}\n\n"
-            "Reason about which saved records matter most and which ones likely require full detail."
+        return self._stage_text("thinking", "user_template").format(
+            user_question=user_question.strip() or "(empty)",
+            catalog=self._summary_catalog(records),
         )
 
     def _acting_prompt(
@@ -337,19 +313,10 @@ class NotebookAnalysisAgent:
         thinking_text: str,
         records: list[dict[str, Any]],
     ) -> str:
-        catalog = self._summary_catalog(records)
-        if self.language == "zh":
-            return (
-                f"用户问题：\n{user_question.strip() or '(empty)'}\n\n"
-                f"[Thinking]\n{thinking_text or '(empty)'}\n\n"
-                f"可选记录：\n{catalog}\n\n"
-                "请只返回最值得查看细节的记录 id，最多 5 个。"
-            )
-        return (
-            f"User question:\n{user_question.strip() or '(empty)'}\n\n"
-            f"[Thinking]\n{thinking_text or '(empty)'}\n\n"
-            f"Available records:\n{catalog}\n\n"
-            "Return only the ids of the records whose full details should be inspected, up to 5."
+        return self._stage_text("acting", "user_template").format(
+            user_question=user_question.strip() or "(empty)",
+            thinking_text=thinking_text or "(empty)",
+            catalog=self._summary_catalog(records),
         )
 
     def _observing_prompt(
@@ -372,20 +339,10 @@ class NotebookAnalysisAgent:
                 for record in selected_records
             ]
         ) or "(none)"
-        if self.language == "zh":
-            return (
-                f"用户问题：\n{user_question.strip() or '(empty)'}\n\n"
-                f"[Thinking]\n{thinking_text or '(empty)'}\n\n"
-                f"[Detailed Records]\n{detailed_blocks}\n\n"
-                "请输出 notebook 分析结论，用于注入后续主能力。"
-                "建议包含：1. 与当前问题直接相关的历史信息；2. 可复用的结论/草稿/上下文；3. 需要谨慎处理的地方。"
-            )
-        return (
-            f"User question:\n{user_question.strip() or '(empty)'}\n\n"
-            f"[Thinking]\n{thinking_text or '(empty)'}\n\n"
-            f"[Detailed Records]\n{detailed_blocks}\n\n"
-            "Produce the notebook analysis output that will be injected into the main capability. "
-            "Include directly relevant history, reusable conclusions or drafts, and any caveats."
+        return self._stage_text("observing", "user_template").format(
+            user_question=user_question.strip() or "(empty)",
+            thinking_text=thinking_text or "(empty)",
+            detailed_blocks=detailed_blocks,
         )
 
     def _summary_catalog(self, records: list[dict[str, Any]]) -> str:

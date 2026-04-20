@@ -67,7 +67,6 @@ def create_structure(user_dir: Path) -> None:
         user_dir / "workspace" / "notebook",
         user_dir / "workspace" / "co-writer" / "audio",
         user_dir / "workspace" / "co-writer" / "tool_calls",
-        user_dir / "workspace" / "guide",
         user_dir / "workspace" / "chat" / "chat",
         user_dir / "workspace" / "chat" / "deep_solve",
         user_dir / "workspace" / "chat" / "deep_question",
@@ -125,8 +124,6 @@ def migrate() -> None:
         (user_dir / "agent" / "research", user_dir / "workspace" / "chat" / "deep_research"),
         (user_dir / "co-writer", user_dir / "workspace" / "co-writer"),
         (user_dir / "agent" / "co-writer", user_dir / "workspace" / "co-writer"),
-        (user_dir / "guide", user_dir / "workspace" / "guide"),
-        (user_dir / "agent" / "guide", user_dir / "workspace" / "guide"),
         (user_dir / "workspace" / "logs", user_dir / "logs"),
         (user_dir / "logs", user_dir / "logs"),
         (user_dir / "agent" / "logs", user_dir / "logs"),
@@ -170,7 +167,6 @@ data/user/
     ├── memory/
     ├── notebook/
     ├── co-writer/
-    ├── guide/
     ├── logs/
     └── chat/
         ├── chat/
@@ -194,7 +190,6 @@ def verify_migration() -> bool:
         "workspace/notebook",
         "workspace/co-writer/audio",
         "workspace/co-writer/tool_calls",
-        "workspace/guide",
         "workspace/chat/chat",
         "workspace/chat/deep_solve",
         "workspace/chat/deep_question",

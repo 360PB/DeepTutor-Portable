@@ -68,6 +68,20 @@ class CodeGeneratorAgent(BaseAgent):
             lang_hint = "svg"
         elif analysis.render_type == "mermaid":
             lang_hint = "mermaid"
+        elif analysis.render_type == "html":
+            lang_hint = "html"
         else:
             lang_hint = "javascript"
-        return extract_code_block(response, lang_hint) or extract_code_block(response)
+
+        extracted = extract_code_block(response, lang_hint) or extract_code_block(response)
+
+        # For html, the model sometimes returns the full document with no fence.
+        # `extract_code_block` will then return the trimmed raw response — accept
+        # it as long as it looks like an HTML document.
+        if analysis.render_type == "html" and not extracted:
+            stripped = (response or "").strip()
+            lowered = stripped.lower()
+            if lowered.startswith("<!doctype") or lowered.startswith("<html"):
+                return stripped
+
+        return extracted

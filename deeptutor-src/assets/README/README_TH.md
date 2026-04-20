@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../logo-ver2.png" alt="DeepTutor" width="140" style="border-radius: 15px;">
+<img src="../../assets/logo-ver2.png" alt="DeepTutor" width="140" style="border-radius: 15px;">
 
 # DeepTutor: ผู้ช่วยติวส่วนบุคคลแบบ Agent-Native
 
@@ -18,13 +18,15 @@
 
 [คุณสมบัติเด่น](#-คุณสมบัติเด่น) · [เริ่มต้นใช้งาน](#-เริ่มต้นใช้งาน) · [สำรวจความสามารถ](#-สำรวจ-deeptutor) · [TutorBot](#-tutorbot--ติวเตอร์-ai-แบบถาวรและอัตโนมัติ) · [CLI](#%EF%B8%8F-deeptutor-cli--อินเทอร์เฟซแบบ-agent-native) · [ชุมชน](#-ชุมชนและระบบนิเวศ)
 
-[🇺🇸 English](../../README.md) · [🇨🇳 中文](README_CN.md) · [🇯🇵 日本語](README_JA.md) · [🇪🇸 Español](README_ES.md) · [🇫🇷 Français](README_FR.md) · [🇸🇦 العربية](README_AR.md) · [🇷🇺 Русский](README_RU.md) · [🇮🇳 हिन्दी](README_HI.md) · [🇵🇹 Português](README_PT.md)
+[🇺🇸 English](../../README.md) · [🇨🇳 中文](README_CN.md) · [🇯🇵 日本語](README_JA.md) · [🇪🇸 Español](README_ES.md) · [🇫🇷 Français](README_FR.md) · [🇸🇦 العربية](README_AR.md) · [🇷🇺 Русский](README_RU.md) · [🇮🇳 हिन्दी](README_HI.md) · [🇵🇹 Português](README_PT.md) · [🇹🇭 ภาษาไทย](README_TH.md)
 
 </div>
 
 ---
 
 ### 📦 ประวัติการเผยแพร่
+
+> **[2026.4.18]** [v1.1.2](https://github.com/HKUDS/DeepTutor/releases/tag/v1.1.2) — แท็บ Channels แบบ schema-driven พร้อมการปกปิดความลับ (secret masking) รวม RAG เป็น pipeline เดียว ปรับปรุงความสอดคล้อง RAG/KB แยก chat prompts ออกเป็นไฟล์ภายนอก และ README ภาษาไทย
 
 > **[2026.4.17]** [v1.1.1](https://github.com/HKUDS/DeepTutor/releases/tag/v1.1.1) — ปุ่ม "ตอบเลย" ข้ามการ reasoning ได้ทุก capability, Co-Writer ปรับขนาด split + scroll sync ตามบรรทัด, บันทึกข้อความลง Notebook แบบเลือก message, ระบบ Notebook จริงครอบคลุม Knowledge/Guide/Save, แผงตั้งค่ารวมแบบพับได้, ปุ่ม Stop รอบการ streaming, refactor TutorBot config manager แบบ atomic write, ปรับ Light/Snow theme ใหม่ และขยาย test suite
 
@@ -88,6 +90,19 @@
 
 ## 🚀 เริ่มต้นใช้งาน
 
+### ข้อกำหนดเบื้องต้น
+
+ก่อนเริ่ม ตรวจสอบว่ามีเครื่องมือต่อไปนี้ติดตั้งแล้ว:
+
+| ข้อกำหนด | เวอร์ชัน | ตรวจสอบ | หมายเหตุ |
+|:---|:---|:---|:---|
+| [Git](https://git-scm.com/) | ใดก็ได้ | `git --version` | สำหรับ clone โปรเจกต์ |
+| [Python](https://www.python.org/downloads/) | 3.11+ | `python --version` | รัน backend |
+| [Node.js](https://nodejs.org/) | 18+ | `node --version` | สำหรับ build frontend (ไม่จำเป็นถ้าใช้แค่ CLI หรือ Docker) |
+| [npm](https://www.npmjs.com/) | 9+ | `npm --version` | มักมากับ Node.js |
+
+คุณยังต้องมี **API Key** จากผู้ให้บริการ LLM อย่างน้อยหนึ่งราย (เช่น [OpenAI](https://platform.openai.com/api-keys), [DeepSeek](https://platform.deepseek.com/), [Anthropic](https://console.anthropic.com/)) Setup Tour จะช่วยให้คุณกรอกและทดสอบการเชื่อมต่อ
+
 ### ตัวเลือก A — Setup Tour (แนะนำ)
 
 **สคริปต์แบบโต้ตอบเพียงชุดเดียว** ที่จะพาคุณผ่านทุกขั้นตอน: ติดตั้ง dependency, ตั้งค่า environment, ทดสอบการเชื่อมต่อแบบเรียลไทม์ และเปิดระบบใช้งาน โดยแทบไม่ต้องแก้ `.env` ด้วยตนเอง
@@ -96,9 +111,10 @@
 git clone https://github.com/HKUDS/DeepTutor.git
 cd DeepTutor
 
-# สร้าง Python environment
-conda create -n deeptutor python=3.11 && conda activate deeptutor
-# หรือ: python -m venv .venv && source .venv/bin/activate
+# สร้าง Python virtual environment (เลือกอย่างใดอย่างหนึ่ง):
+conda create -n deeptutor python=3.11 && conda activate deeptutor   # ถ้าใช้ Anaconda/Miniconda
+python -m venv .venv && source .venv/bin/activate                    # มิฉะนั้น (macOS/Linux)
+python -m venv .venv && .venv\Scripts\activate                       # มิฉะนั้น (Windows)
 
 # เริ่ม guided tour
 python scripts/start_tour.py
@@ -110,6 +126,14 @@ Setup Tour จะถามว่าคุณต้องการใช้งา
 - **CLI mode** — ตั้งค่าทุกอย่างในเทอร์มินัล ตั้งแต่เลือก dependency profile ไปจนถึงตรวจสอบการเชื่อมต่อและบันทึกการตั้งค่า
 
 ไม่ว่าจะเลือกแบบไหน คุณจะเข้าใช้งานได้ที่ [http://localhost:3782](http://localhost:3782)
+
+> **การเปิดใช้งานประจำวัน** — ต้องรัน Tour เพียงครั้งเดียว หลังจากนั้นให้ใช้:
+>
+> ```bash
+> python scripts/start_web.py
+> ```
+>
+> คำสั่งนี้จะสตาร์ททั้ง backend และ frontend พร้อมเปิดเบราว์เซอร์ให้โดยอัตโนมัติ รัน `start_tour.py` ใหม่เฉพาะเมื่อต้องการตั้งค่าผู้ให้บริการใหม่หรือติดตั้ง dependency ใหม่
 
 ### ตัวเลือก B — ติดตั้งเองแบบ Local
 
@@ -220,6 +244,16 @@ EMBEDDING_DIMENSION=3072
 </details>
 
 **3. เริ่มบริการ**
+
+วิธีที่เร็วที่สุด:
+
+```bash
+python scripts/start_web.py
+```
+
+คำสั่งนี้จะสตาร์ททั้ง backend และ frontend พร้อมเปิดเบราว์เซอร์ให้โดยอัตโนมัติ
+
+หรือรันแยกเทอร์มินัล:
 
 ```bash
 # Backend (FastAPI)

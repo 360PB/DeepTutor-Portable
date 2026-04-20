@@ -309,46 +309,23 @@ class DeepSolveCapability(BaseCapability):
             format_trace_summary,
             join_chunks,
             labeled_block,
+            load_answer_now_prompts,
             make_skip_notice,
             stream_synthesis,
         )
 
-        is_zh = context.language.lower().startswith("zh")
         original = str(payload.get("original_user_message") or context.user_message).strip()
         partial = str(payload.get("partial_response") or "").strip()
         trace_summary = format_trace_summary(payload.get("events"), language=context.language)
 
-        if is_zh:
-            system_prompt = (
-                "你是 DeepTutor 的写作组件。用户已经在等待，"
-                "你必须基于当前已经收集到的推理与工具调用轨迹直接输出最终答复。"
-                "不要再做新的规划或调用工具，不要提到内部阶段。"
-                "如果信息仍有缺口，请诚实说明不确定之处，但仍尽可能给出当前最有用的回答。"
-            )
-            user_prompt = (
-                f"用户原始问题：\n{original}\n\n"
-                f"{labeled_block('Current Draft', partial)}\n\n"
-                f"{labeled_block('Execution Trace', trace_summary)}\n\n"
-                "请基于以上材料立即生成给用户的最终回答。"
-            )
-            notice_label = "Writing"
-        else:
-            system_prompt = (
-                "You are the writer component of DeepTutor. The user is "
-                "already waiting, so produce the final user-facing answer "
-                "right now using only the partial reasoning trace that has "
-                "streamed so far. Do not plan further or call tools, and do "
-                "not mention internal stages. If something is still uncertain, "
-                "acknowledge it briefly while still giving the most useful "
-                "answer you can."
-            )
-            user_prompt = (
-                f"Original user request:\n{original}\n\n"
-                f"{labeled_block('Current Draft', partial)}\n\n"
-                f"{labeled_block('Execution Trace', trace_summary)}\n\n"
-                "Produce the final user-facing answer using only this context."
-            )
-            notice_label = "Writing"
+        prompts = load_answer_now_prompts("solve", context.language)
+        system_prompt = str(prompts.get("system", "")).strip()
+        user_prompt = str(prompts.get("user_template", "")).format(
+            original=original,
+            current_draft=labeled_block("Current Draft", partial),
+            execution_trace=labeled_block("Execution Trace", trace_summary),
+        )
+        notice_label = "Writing"
 
         trace_meta = build_answer_now_trace_metadata(
             capability=self.name, phase="writing", label="Answer now"

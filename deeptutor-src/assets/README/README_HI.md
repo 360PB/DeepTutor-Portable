@@ -18,26 +18,34 @@
 
 [मुख्य विशेषताएँ](#key-features) · [शुरू करें](#get-started) · [अन्वेषण](#explore-deeptutor) · [TutorBot](#tutorbot) · [CLI](#deeptutor-cli-guide) · [रोडमैप](#roadmap) · [समुदाय](#community)
 
-[🇬🇧 English](../../README.md) · [🇨🇳 中文](README_CN.md) · [🇯🇵 日本語](README_JA.md) · [🇪🇸 Español](README_ES.md) · [🇫🇷 Français](README_FR.md) · [🇸🇦 العربية](README_AR.md) · [🇷🇺 Русский](README_RU.md) · [🇵🇹 Português](README_PT.md)
+[🇬🇧 English](../../README.md) · [🇨🇳 中文](README_CN.md) · [🇯🇵 日本語](README_JA.md) · [🇪🇸 Español](README_ES.md) · [🇫🇷 Français](README_FR.md) · [🇸🇦 العربية](README_AR.md) · [🇷🇺 Русский](README_RU.md) · [🇮🇳 हिन्दी](README_HI.md) · [🇵🇹 Português](README_PT.md) · [🇹🇭 ภาษาไทย](README_TH.md)
 
 </div>
 
 ---
-### 📰 समाचार
-
-> **[2026.4.4]** बहुत दिन बाद! ✨ DeepTutor v1.0.0 आ गया — Apache-2.0 के तहत एजेंट-नेटिव विकास: ज़मीन से आर्किटेक्चर रिराइट, TutorBot, लचीले मोड। नया अध्याय शुरू!
-
-> **[2026.2.6]** 🚀 39 दिनों में 10k सितारे — समुदाय का धन्यवाद!
-
-> **[2026.1.1]** नया साल मुबारक! [Discord](https://discord.gg/eRsjPgMU4t), [WeChat](https://github.com/HKUDS/DeepTutor/issues/78), [Discussions](https://github.com/HKUDS/DeepTutor/discussions) से जुड़ें।
-
-> **[2025.12.29]** DeepTutor आधिकारिक रूप से जारी।
-
 ### 📦 रिलीज़
 
-> **[2026.4.7]** [v1.0.0-beta.2](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.2) — गर्म सेटिंग रीलोड के लिए रनटाइम कैश इनवैलिडेशन, MinerU नेस्टेड आउटपुट, mimic WebSocket फिक्स, न्यूनतम Python 3.11+, CI सुधार।
+> **[2026.4.18]** [v1.1.2](https://github.com/HKUDS/DeepTutor/releases/tag/v1.1.2) — स्कीमा-चालित Channels टैब व सीक्रेट मास्किंग; एकल RAG पाइपलाइन; RAG/KB स्थिरता मजबूत; चैट प्रॉम्प्ट बाहरी फ़ाइलों में; थाई README।
 
-> **[2026.4.4]** [v1.0.0-beta.1](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.1) — एजेंट-नेटिव आर्किटेक्चर रिराइट (DeepTutor 2.0): दो-स्तरीय प्लगइन मॉडल (Tools + Capabilities), CLI व SDK प्रवेश, मल्टी-चैनल TutorBot, Co-Writer, Guided Learning, स्थायी मेमोरी।
+> **[2026.4.17]** [v1.1.1](https://github.com/HKUDS/DeepTutor/releases/tag/v1.1.1) — सभी क्षमताओं पर सार्वभौमिक «अभी उत्तर दें»; Co-Writer स्क्रॉल सिंक; नोटबुक में सहेजते समय संदेश चयन; एकीकृत सेटिंग्स पैनल; स्ट्रीमिंग Stop बटन; TutorBot कॉन्फ़िगरेशन परमाणु लेखन।
+
+> **[2026.4.15]** [v1.1.0](https://github.com/HKUDS/DeepTutor/releases/tag/v1.1.0) — LaTeX ब्लॉक गणित पार्सिंग ओवरहॉल; `agents.yaml` के माध्यम से LLM डायग्नोस्टिक प्रोब; अतिरिक्त हेडर फॉरवर्डिंग फिक्स; SaveToNotebook UUID फिक्स; Docker + स्थानीय LLM मार्गदर्शिका।
+
+> **[2026.4.14]** [v1.1.0-beta](https://github.com/HKUDS/DeepTutor/releases/tag/v1.1.0-beta) — URL-आधारित बुकमार्क योग्य सत्र; Snow थीम; WebSocket हार्टबीट व ऑटो-रीकनेक्ट; ChatComposer प्रदर्शन सुधार; एम्बेडिंग प्रदाता रजिस्ट्री ओवरहॉल; Serper खोज प्रदाता।
+
+> **[2026.4.13]** [v1.0.3](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.3) — बुकमार्क व श्रेणियों के साथ प्रश्न नोटबुक; Visualize में Mermaid; एम्बेडिंग बेमेल पहचान; Qwen/vLLM अनुकूलता; LM Studio व llama.cpp समर्थन; Glass थीम।
+
+> **[2026.4.11]** [v1.0.2](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.2) — SearXNG फ़ॉलबैक के साथ खोज समेकन; प्रदाता स्विच फिक्स; फ्रंटएंड संसाधन रिसाव फिक्स।
+
+> **[2026.4.10]** [v1.0.1](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.1) — Visualize क्षमता (Chart.js/SVG); क्विज़ डुप्लिकेट रोकथाम; o4-mini मॉडल समर्थन।
+
+> **[2026.4.10]** [v1.0.0-beta.4](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.4) — दर सीमा पर पुनःप्रयास के साथ एम्बेडिंग प्रगति; क्रॉस-प्लेटफ़ॉर्म निर्भरता फिक्स; MIME सत्यापन।
+
+> **[2026.4.8]** [v1.0.0-beta.3](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.3) — नेटिव OpenAI/Anthropic SDK (litellm हटाया); Windows पर Math Animator; मजबूत JSON पार्सिंग; पूर्ण चीनी i18n।
+
+> **[2026.4.7]** [v1.0.0-beta.2](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.2) — गर्म सेटिंग रीलोड; MinerU नेस्टेड आउटपुट; WebSocket फिक्स; न्यूनतम Python 3.11+।
+
+> **[2026.4.4]** [v1.0.0-beta.1](https://github.com/HKUDS/DeepTutor/releases/tag/v1.0.0-beta.1) — एजेंट-नेटिव आर्किटेक्चर रिराइट (~200k पंक्तियाँ): Tools + Capabilities प्लगइन मॉडल, CLI व SDK, TutorBot, Co-Writer, Guided Learning, स्थायी मेमोरी।
 
 <details>
 <summary><b>पिछले रिलीज़</b></summary>
@@ -56,6 +64,16 @@
 
 </details>
 
+### 📰 समाचार
+
+> **[2026.4.4]** बहुत दिन बाद! ✨ DeepTutor v1.0.0 आ गया — Apache-2.0 के तहत एजेंट-नेटिव विकास: ज़मीन से आर्किटेक्चर रिराइट, TutorBot, लचीले मोड। नया अध्याय शुरू!
+
+> **[2026.2.6]** 🚀 39 दिनों में 10k सितारे — समुदाय का धन्यवाद!
+
+> **[2026.1.1]** नया साल मुबारक! [Discord](https://discord.gg/eRsjPgMU4t), [WeChat](https://github.com/HKUDS/DeepTutor/issues/78), [Discussions](https://github.com/HKUDS/DeepTutor/discussions) से जुड़ें।
+
+> **[2025.12.29]** DeepTutor आधिकारिक रूप से जारी।
+
 <a id="key-features"></a>
 ## ✨ मुख्य विशेषताएँ
 
@@ -72,48 +90,87 @@
 <a id="get-started"></a>
 ## 🚀 शुरू करें
 
+### पूर्वापेक्षाएँ
+
+शुरू करने से पहले सुनिश्चित करें कि ये स्थापित हैं:
+
+| आवश्यकता | संस्करण | जाँच | नोट |
+|:---|:---|:---|:---|
+| [Git](https://git-scm.com/) | कोई भी | `git --version` | क्लोन के लिए |
+| [Python](https://www.python.org/downloads/) | 3.11+ | `python --version` | बैकएंड |
+| [Node.js](https://nodejs.org/) | 18+ | `node --version` | फ्रंटएंड बिल्ड (केवल CLI या Docker पर अनिवार्य नहीं) |
+| [npm](https://www.npmjs.com/) | 9+ | `npm --version` | आमतौर पर Node के साथ |
+
+कम से कम एक LLM प्रदाता की **API कुंजी** आवश्यक है (उदा. [OpenAI](https://platform.openai.com/api-keys), [DeepSeek](https://platform.deepseek.com/), [Anthropic](https://console.anthropic.com/))। सेटअप टूर इसे भरवाने और कनेक्शन परीक्षण में मदद करता है।
+
 ### विकल्प A — सेटअप टूर (अनुशंसित)
 
-**एक इंटरैक्टिव स्क्रिप्ट** — निर्भरता, वातावरण, कनेक्शन टेस्ट, लॉन्च।
+**एक इंटरैक्टिव स्क्रिप्ट** निर्भरताएँ स्थापित करती है, वातावरण सेट करती है, लाइव कनेक्शन टेस्ट करती है और लॉन्च करती है। `.env` का मैनुअल संपादन लगभग अनावश्यक।
 
 ```bash
 git clone https://github.com/HKUDS/DeepTutor.git
 cd DeepTutor
 
-conda create -n deeptutor python=3.11 && conda activate deeptutor
-# या: python -m venv .venv && source .venv/bin/activate
+# Python वर्चुअल वातावरण (एक चुनें):
+conda create -n deeptutor python=3.11 && conda activate deeptutor   # Anaconda/Miniconda हो तो
+python -m venv .venv && source .venv/bin/activate                    # अन्यथा (macOS/Linux)
+python -m venv .venv && .venv\Scripts\activate                       # अन्यथा (Windows)
 
 python scripts/start_tour.py
 ```
 
-- **वेब मोड** — प्रोफ़ाइल, pip + npm, अस्थायी सर्वर, **सेटिंग्स**, 4 चरण।
-- **CLI मोड** — पूरा टर्मिनल।
+टूर पूछता है कि आप DeepTutor कैसे उपयोग करना चाहते हैं:
 
-[http://localhost:3782](http://localhost:3782)
+- **वेब मोड** (अनुशंसित) — सभी निर्भरताएँ (pip + npm) स्थापित करता है, अस्थायी सर्वर चालू करता है और ब्राउज़र में **सेटिंग्स** खोलता है; LLM, एम्बेडिंग व खोज के लिए चार चरणों में लाइव टेस्ट; पूरा होने पर आपकी कॉन्फ़िगरेशन के साथ DeepTutor स्वतः पुनः आरंभ।
+- **CLI मोड** — पूरा इंटरैक्टिव टर्मिनल प्रवाह: प्रोफ़ाइल, स्थापना, प्रदाता, सत्यापन और लागू — बिना शेल छोड़े।
+
+दोनों स्थितियों में परिणाम [http://localhost:3782](http://localhost:3782) है।
+
+> **दैनिक लॉन्च** — टूर केवल एक बार चलाएँ। उसके बाद:
+>
+> ```bash
+> python scripts/start_web.py
+> ```
+>
+> यह एक ही कमांड से बैकएंड व फ्रंटएंड चालू करता है और ब्राउज़र खोलता है। केवल प्रदाता बदलने या निर्भरताएँ पुनः स्थापित करने पर `start_tour.py` दोबारा चलाएँ।
 
 <a id="option-b-manual"></a>
 ### विकल्प B — मैन्युअल स्थानीय इंस्टॉल
+
+पूर्ण नियंत्रण चाहिए तो सब कुछ स्वयं स्थापित व कॉन्फ़िगर करें।
+
+**1. निर्भरताएँ स्थापित करें**
 
 ```bash
 git clone https://github.com/HKUDS/DeepTutor.git
 cd DeepTutor
 
+# वर्चुअल वातावरण बनाएँ व सक्रिय करें (विकल्प A जैसा)
 conda create -n deeptutor python=3.11 && conda activate deeptutor
+
+# बैकएंड + वेब सर्वर निर्भरताओं के साथ DeepTutor
 pip install -e ".[server]"
 
+# फ्रंटएंड (Node.js 18+ आवश्यक)
 cd web && npm install && cd ..
 ```
+
+**2. वातावरण कॉन्फ़िगर करें**
 
 ```bash
 cp .env.example .env
 ```
 
+`.env` संपादित करें और कम से कम आवश्यक फ़ील्ड भरें:
+
 ```dotenv
+# LLM (आवश्यक)
 LLM_BINDING=openai
 LLM_MODEL=gpt-4o-mini
 LLM_API_KEY=sk-xxx
 LLM_HOST=https://api.openai.com/v1
 
+# एम्बेडिंग (नॉलेज बेस के लिए आवश्यक)
 EMBEDDING_BINDING=openai
 EMBEDDING_MODEL=text-embedding-3-large
 EMBEDDING_API_KEY=sk-xxx
@@ -137,6 +194,8 @@ EMBEDDING_DIMENSION=3072
 | Gemini | `gemini` | `https://generativelanguage.googleapis.com/v1beta/openai/` |
 | GitHub Copilot | `github_copilot` | `https://api.githubcopilot.com` |
 | Groq | `groq` | `https://api.groq.com/openai/v1` |
+| llama.cpp | `llama_cpp` | `http://localhost:8080/v1` |
+| LM Studio | `lm_studio` | `http://localhost:1234/v1` |
 | MiniMax | `minimax` | `https://api.minimax.io/v1` |
 | Mistral | `mistral` | `https://api.mistral.ai/v1` |
 | Moonshot (Kimi) | `moonshot` | `https://api.moonshot.ai/v1` |
@@ -159,16 +218,17 @@ EMBEDDING_DIMENSION=3072
 <details>
 <summary><b>समर्थित एम्बेडिंग प्रदाता</b></summary>
 
-एम्बेडिंग के लिए LLM जैसी ही सूची। सामान्य उदाहरण:
+| प्रदाता | Binding | मॉडल उदाहरण | डिफ़ॉल्ट आयाम |
+|:--|:--|:--|:--|
+| OpenAI | `openai` | `text-embedding-3-large` | 3072 |
+| Azure OpenAI | `azure_openai` | परिनियोजन नाम | — |
+| Cohere | `cohere` | `embed-v4.0` | 1024 |
+| Jina | `jina` | `jina-embeddings-v3` | 1024 |
+| Ollama | `ollama` | `nomic-embed-text` | 768 |
+| vLLM / LM Studio | `vllm` | कोई भी एम्बेडिंग मॉडल | — |
+| OpenAI-संगत | `custom` | — | — |
 
-| प्रदाता | Binding | मॉडल उदाहरण |
-|:--|:--|:--|
-| OpenAI | `openai` | `text-embedding-3-large` |
-| DashScope | `dashscope` | `text-embedding-v3` |
-| Ollama | `ollama` | `nomic-embed-text` |
-| SiliconFlow | `siliconflow` | `BAAI/bge-m3` |
-| vLLM | `vllm` | कोई भी एम्बेडिंग मॉडल |
-| OpenAI-संगत | `custom` | — |
+OpenAI-संगत प्रदाता (DashScope, SiliconFlow, आदि) `custom` या `openai` binding से काम करते हैं।
 
 </details>
 
@@ -186,17 +246,38 @@ EMBEDDING_DIMENSION=3072
 
 </details>
 
+**3. सेवाएँ शुरू करें**
+
+सबसे तेज़ तरीका:
+
 ```bash
+python scripts/start_web.py
+```
+
+बैकएंड व फ्रंटएंड एक साथ चालू करता है और ब्राउज़र खोलता है।
+
+अलग-अलग टर्मिनल में मैन्युअल:
+
+```bash
+# Backend (FastAPI)
 python -m deeptutor.api.run_server
+
+# Frontend (Next.js) — दूसरा टर्मिनल
 cd web && npm run dev -- -p 3782
 ```
 
-| सेवा | पोर्ट |
+| सेवा | डिफ़ॉल्ट पोर्ट |
 |:---:|:---:|
 | Backend | `8001` |
 | Frontend | `3782` |
 
+[http://localhost:3782](http://localhost:3782) खोलें।
+
 ### विकल्प C — Docker
+
+Docker बैकएंड व फ्रंटएंड को एक कंटेनर में लपेटता है; स्थानीय Python या Node.js अनावश्यक। [Docker Desktop](https://www.docker.com/products/docker-desktop/) (या Linux पर Docker Engine + Compose) पर्याप्त है।
+
+**1. पर्यावरण चर** (नीचे दोनों विकल्पों के लिए आवश्यक)
 
 ```bash
 git clone https://github.com/HKUDS/DeepTutor.git
@@ -204,47 +285,80 @@ cd DeepTutor
 cp .env.example .env
 ```
 
-[विकल्प B](#option-b-manual) जैसा।
+`.env` में कम से कम आवश्यक फ़ील्ड भरें ([विकल्प B](#option-b-manual) जैसा)।
 
-**2a. आधिकारिक इमेज** — [GHCR](https://github.com/HKUDS/DeepTutor/pkgs/container/deeptutor)
+**2a. आधिकारिक इमेज खींचें (अनुशंसित)**
+
+आधिकारिक इमेज [GitHub Container Registry](https://github.com/HKUDS/DeepTutor/pkgs/container/deeptutor) पर प्रत्येक रिलीज़ के लिए `linux/amd64` व `linux/arm64` के लिए प्रकाशित होती हैं।
 
 ```bash
 docker compose -f docker-compose.ghcr.yml up -d
 ```
 
-**2b. स्रोत से बिल्ड** — `docker compose up -d`
+संस्करण पिन करने के लिए `docker-compose.ghcr.yml` में इमेज टैग संपादित करें:
 
-**3.** [http://localhost:3782](http://localhost:3782)
+```yaml
+image: ghcr.io/hkuds/deeptutor:1.0.0  # या :latest
+```
+
+**2b. स्रोत से बिल्ड**
 
 ```bash
-docker compose logs -f
-docker compose down
+docker compose up -d
+```
+
+`Dockerfile` से स्थानीय रूप से इमेज बनाता है और कंटेनर चालू करता है।
+
+**3. सत्यापन व प्रबंधन**
+
+कंटेनर healthy होने पर [http://localhost:3782](http://localhost:3782) खोलें।
+
+```bash
+docker compose logs -f   # लॉग टेल
+docker compose down       # कंटेनर रोकें व हटाएँ
 ```
 
 <details>
-<summary><b>क्लाउड / रिमोट</b></summary>
+<summary><b>क्लाउड / रिमोट सर्वर</b></summary>
+
+रिमोट सर्वर पर ब्राउज़र को बैकएंड API का सार्वजनिक URL चाहिए। `.env` में जोड़ें:
 
 ```dotenv
+# सार्वजनिक URL जहाँ बैकएंड पहुँच योग्य है
 NEXT_PUBLIC_API_BASE_EXTERNAL=https://your-server.com:8001
 ```
+
+फ्रंटएंड स्टार्टअप स्क्रिप्ट रनटाइम पर यह मान लागू करती है — रीबिल्ड अनावश्यक।
 
 </details>
 
 <details>
 <summary><b>डेव मोड (हॉट-रिलोड)</b></summary>
 
+स्रोत माउंट करने व दोनों सेवाओं पर हॉट-रिलोड के लिए डेव ओवरले लगाएँ:
+
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 ```
+
+`deeptutor/`, `deeptutor_cli/`, `scripts/` व `web/` में परिवर्तन तुरंत दिखते हैं।
 
 </details>
 
 <details>
 <summary><b>कस्टम पोर्ट</b></summary>
 
+`.env` में डिफ़ॉल्ट पोर्ट ओवरराइड करें:
+
 ```dotenv
 BACKEND_PORT=9001
 FRONTEND_PORT=4000
+```
+
+फिर पुनः आरंभ करें:
+
+```bash
+docker compose up -d     # या docker compose -f docker-compose.ghcr.yml up -d
 ```
 
 </details>
@@ -252,40 +366,57 @@ FRONTEND_PORT=4000
 <details>
 <summary><b>डेटा स्थिरता</b></summary>
 
-| कंटेनर पथ | होस्ट | सामग्री |
+उपयोगकर्ता डेटा व नॉलेज बेस Docker वॉल्यूम के माध्यम से स्थानीय निर्देशिकाओं पर मैप होते हैं:
+
+| कंटेनर पथ | होस्ट पथ | सामग्री |
 |:---|:---|:---|
 | `/app/data/user` | `./data/user` | सेटिंग्स, मेमोरी, वर्कस्पेस, सत्र, लॉग |
-| `/app/data/knowledge_bases` | `./data/knowledge_bases` | दस्तावेज़ व वेक्टर |
+| `/app/data/knowledge_bases` | `./data/knowledge_bases` | अपलोड दस्तावेज़ व वेक्टर इंडेक्स |
+
+`docker compose down` के बाद भी ये निर्देशिकाएँ बनी रहती हैं और अगले `up` पर पुनः उपयोग होती हैं।
 
 </details>
 
 <details>
-<summary><b>पर्यावरण चर</b></summary>
+<summary><b>पर्यावरण चर संदर्भ</b></summary>
 
 | चर | आवश्यक | विवरण |
 |:---|:---:|:---|
-| `LLM_BINDING` | **हाँ** | LLM प्रदाता |
-| `LLM_MODEL` | **हाँ** | मॉडल |
-| `LLM_API_KEY` | **हाँ** | कुंजी |
-| `LLM_HOST` | **हाँ** | URL |
-| `EMBEDDING_BINDING` | **हाँ** | एम्बेडिंग |
-| `EMBEDDING_MODEL` | **हाँ** | मॉडल |
-| `EMBEDDING_API_KEY` | **हाँ** | कुंजी |
-| `EMBEDDING_HOST` | **हाँ** | URL |
-| `EMBEDDING_DIMENSION` | **हाँ** | आयाम |
-| `SEARCH_PROVIDER` | नहीं | खोज |
-| `SEARCH_API_KEY` | नहीं | कुंजी |
-| `BACKEND_PORT` | नहीं | डिफ़ॉल्ट `8001` |
-| `FRONTEND_PORT` | नहीं | डिफ़ॉल्ट `3782` |
-| `NEXT_PUBLIC_API_BASE_EXTERNAL` | नहीं | सार्वजनिक URL |
-| `DISABLE_SSL_VERIFY` | नहीं | डिफ़ॉल्ट `false` |
+| `LLM_BINDING` | **हाँ** | LLM प्रदाता (`openai`, `anthropic`, आदि) |
+| `LLM_MODEL` | **हाँ** | मॉडल नाम (उदा. `gpt-4o`) |
+| `LLM_API_KEY` | **हाँ** | LLM API कुंजी |
+| `LLM_HOST` | **हाँ** | API URL |
+| `EMBEDDING_BINDING` | **हाँ** | एम्बेडिंग प्रदाता |
+| `EMBEDDING_MODEL` | **हाँ** | एम्बेडिंग मॉडल नाम |
+| `EMBEDDING_API_KEY` | **हाँ** | एम्बेडिंग API कुंजी |
+| `EMBEDDING_HOST` | **हाँ** | एम्बेडिंग एंडपॉइंट |
+| `EMBEDDING_DIMENSION` | **हाँ** | वेक्टर आयाम |
+| `SEARCH_PROVIDER` | नहीं | खोज (`tavily`, `jina`, `serper`, `perplexity`, आदि) |
+| `SEARCH_API_KEY` | नहीं | खोज API कुंजी |
+| `BACKEND_PORT` | नहीं | बैकएंड पोर्ट (डिफ़ॉल्ट `8001`) |
+| `FRONTEND_PORT` | नहीं | फ्रंटएंड पोर्ट (डिफ़ॉल्ट `3782`) |
+| `NEXT_PUBLIC_API_BASE_EXTERNAL` | नहीं | क्लाउड के लिए सार्वजनिक बैकएंड URL |
+| `DISABLE_SSL_VERIFY` | नहीं | SSL सत्यापन बंद (डिफ़ॉल्ट `false`) |
 
 </details>
 
 ### विकल्प D — केवल CLI
 
+यदि केवल CLI चाहिए, वेब फ्रंटएंड के बिना:
+
 ```bash
 pip install -e ".[cli]"
+```
+
+LLM प्रदाता कॉन्फ़िगर करना अभी भी आवश्यक है। सबसे तेज़:
+
+```bash
+cp .env.example .env   # फिर .env में API कुंजियाँ भरें
+```
+
+कॉन्फ़िगरेशन के बाद:
+
+```bash
 deeptutor chat
 deeptutor run chat "Explain Fourier transform"
 deeptutor run deep_solve "Solve x^2 = 4"
@@ -503,8 +634,10 @@ deeptutor session open <id>
 
 | स्थिति | माइलस्टोन |
 |:---:|:---|
-| 🔜 | **प्रमाणीकरण व लॉगिन** — सार्वजनिक डिप्लॉय के लिए वैकल्पिक लॉगिन व बहु-उपयोगकर्ता |
-| 🔜 | **थीम व रूप** — विविध थीम व अनुकूलित UI |
+| 🎯 | **प्रमाणीकरण व लॉगिन** — सार्वजनिक डिप्लॉय के लिए वैकल्पिक लॉगिन पृष्ठ व बहु-उपयोगकर्ता समर्थन |
+| 🎯 | **थीम व रूप** — विविध थीम व अनुकूलित UI दिखावट |
+| 🎯 | **इंटरैक्शन में सुधार** — आइकन डिज़ाइन व इंटरैक्शन विवरणों का अनुकूलन |
+| 🔜 | **बेहतर मेमोरी** — बेहतर मेमोरी प्रबंधन का एकीकरण |
 | 🔜 | **LightRAG एकीकरण** — [LightRAG](https://github.com/HKUDS/LightRAG) को उन्नत नॉलेज बेस इंजन के रूप में |
 | 🔜 | **दस्तावेज़ साइट** — गाइड, API संदर्भ व ट्यूटोरियल सहित पूर्ण दस्तावेज़ीकरण |
 
@@ -549,6 +682,16 @@ deeptutor session open <id>
   </picture>
 </a>
 </div>
+
+<p align="center">
+ <a href="https://www.star-history.com/hkuds/deeptutor">
+  <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/badge?repo=HKUDS/DeepTutor&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/badge?repo=HKUDS/DeepTutor" />
+   <img alt="Star History Rank" src="https://api.star-history.com/badge?repo=HKUDS/DeepTutor" />
+  </picture>
+ </a>
+</p>
 
 <div align="center">
 
